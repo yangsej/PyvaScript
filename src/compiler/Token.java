@@ -43,9 +43,11 @@ public class Token {
 	public static final Token spaceTok = new Token(TokenType.Space, " ");
 	public static final Token enterTok = new Token(TokenType.Enter, "\n");
 
+<<<<<<< HEAD
 	public static final Token printTok = new Token(TokenType.Print, "print");
 	public static final Token inputTok = new Token(TokenType.Input, "input");
 
+=======
 	private TokenType type;
 	private String value = "";
 
@@ -66,6 +68,7 @@ public class Token {
 	public String value() {
 		return value;
 	}
+<<<<<<< HEAD
 
 	public static Token keyword(String name) {
 		char ch = name.charAt(0);
@@ -97,6 +100,7 @@ public class Token {
 		return new Token(TokenType.StrLiteral, name);
 	}
 
+=======
 	public String toString() {
 		if (type.compareTo(TokenType.Identifier) < 0)
 			return value;
