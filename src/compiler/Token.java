@@ -1,7 +1,6 @@
 package compiler;
 
 public class Token {
-
 	private static final int KEYWORDS = TokenType.Eof.ordinal();
 
 	private static final String[] reserved = new String[KEYWORDS];
@@ -100,9 +99,4 @@ public class Token {
 			return value;
 		return type + "\t" + value;
 	} // toString
-
-	public static void main(String[] args) {
-		System.out.println(eofTok);
-		System.out.println(whileTok);
-	}
 } // Token

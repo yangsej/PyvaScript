@@ -51,7 +51,7 @@ public class Lexer {
 		return line.charAt(col);
 	}
 
-	public int getLineNum() { // line �닔瑜� 諛섑솚�븯�뒗 �븿�닔
+	public int getLineNum() { // line 계산
 		return lineno;
 	}
 

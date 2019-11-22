@@ -1,10 +1,10 @@
 package compiler;
 
 public enum TokenType {
-    /*Bool, Char, */Else, False, /*Float,*/
-     If, /*Int,*/ True, While,
-     
-     /*Str,*/ Print, Input,
+//    Bool, Char, Float, Int, Str,
+	True, False,
+    If, Else, While,
+    Print, Input,
      
     Eof, LeftBracket, RightBracket,
     LeftParen, RightParen, Semicolon, Comma, Assign,
