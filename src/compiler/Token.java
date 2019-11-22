@@ -1,16 +1,19 @@
 package compiler;
 
 public class Token {
-
 	private static final int KEYWORDS = TokenType.Eof.ordinal();
 
 	private static final String[] reserved = new String[KEYWORDS];
 	private static Token[] token = new Token[KEYWORDS];
 
 	public static final Token eofTok = new Token(TokenType.Eof, "<<EOF>>");
+//	public static final Token boolTok = new Token(TokenType.Bool, "bool");
+//	public static final Token charTok = new Token(TokenType.Char, "char");
 	public static final Token elseTok = new Token(TokenType.Else, "else");
 	public static final Token falseTok = new Token(TokenType.False, "false");
+//	public static final Token floatTok = new Token(TokenType.Float, "float");
 	public static final Token ifTok = new Token(TokenType.If, "if");
+//	public static final Token intTok = new Token(TokenType.Int, "int");
 	public static final Token trueTok = new Token(TokenType.True, "true");
 	public static final Token whileTok = new Token(TokenType.While, "while");
 	public static final Token leftBracketTok = new Token(TokenType.LeftBracket, "[");
@@ -34,6 +37,7 @@ public class Token {
 	public static final Token andTok = new Token(TokenType.And, "&&");
 	public static final Token orTok = new Token(TokenType.Or, "||");
 
+//	public static final Token strTok = new Token(TokenType.Str, "str");
 	public static final Token colonTok = new Token(TokenType.Colon, ":");
 	public static final Token tabTok = new Token(TokenType.Tab, "\t");
 	public static final Token spaceTok = new Token(TokenType.Space, " ");
@@ -89,14 +93,13 @@ public class Token {
 		return new Token(TokenType.CharLiteral, name);
 	}
 
+	public static Token mkStrLiteral(String name) {
+		return new Token(TokenType.StrLiteral, name);
+	}
+
 	public String toString() {
 		if (type.compareTo(TokenType.Identifier) < 0)
 			return value;
 		return type + "\t" + value;
 	} // toString
-
-	public static void main(String[] args) {
-		System.out.println(eofTok);
-		System.out.println(whileTok);
-	}
 } // Token
