@@ -53,7 +53,7 @@ public class Lexer {
         return line.charAt(col);
     }
        
-    public int getLineNum() { // line ìˆ˜ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
+    public int getLineNum() { // line ¼ö¸¦ ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö
         return lineno;
     } 
 

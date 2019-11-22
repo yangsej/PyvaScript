@@ -1,15 +1,17 @@
 package compiler;
 
 public enum TokenType {
-    Bool, Char, Else, False, Float,
-     If, Int, True, While,
+	// Keywords
+    Else, False,
+	If, True, While,
+    Print, Input,
+    
+    // Others
     Eof, LeftBracket, RightBracket,
     LeftParen, RightParen, Semicolon, Comma, Assign,
     Equals, Less, LessEqual, Greater, GreaterEqual,
     Not, NotEqual, Plus, Minus, Multiply,
     Divide, And, Or, Identifier, IntLiteral,
-    FloatLiteral, CharLiteral,
-    
-    
-    StrLiteral, Str, Colon, Tab, Space, Enter
+    FloatLiteral, CharLiteral, StrLiteral,
+    Colon, Tab, Space, Enter,
 }

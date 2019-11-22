@@ -1,19 +1,14 @@
 package compiler;
 
-
-//Abstract syntax for the language C++Lite,
-//exactly as it appears in Appendix B.
 import java.util.*;
 
 class Program {
-	// Program = Declarations decpart ; Block body
-	Declarations decpart;
+	// Program = Block body
 	Block body;
 
 	static int tabs = 0;
 
-	Program(Declarations d, Block b) {
-		decpart = d;
+	Program(Block b) {
 		body = b;
 	}
 
@@ -21,7 +16,6 @@ class Program {
 		// TODO Auto-generated method stub
 		System.out.println("Program");
 		tabs++;
-		System.out.println(decpart);
 		System.out.println(body);
 	}
 
@@ -30,46 +24,13 @@ class Program {
 	}
 }
 
-class Declarations extends ArrayList<Declaration> {
-	// Declarations = Declaration*
-	// (a list of declarations d1, d2, ..., dn)
-
-	public String toString() {
-		String str = Program.tab() + "Declarations";
-		Program.tabs++;
-		for (Declaration d : this) {
-			str += "\n" + d;
-		}
-		Program.tabs--;
-		return str;
-	}
-}
-
-class Declaration {
-//Declaration = Variable v; Type t
-	Variable v;
-	Type t;
-
-	Declaration(Variable var, Type type) {
-		v = var;
-		t = type;
-	} // declaration */
-
-	public String toString() {
-		String s = Program.tab() + "Declaration";
-		Program.tabs++;
-		s += "\n" + Program.tab() + v + "\n" + Program.tab() + t;
-		Program.tabs--;
-		return s;
-	}
-}
-
 class Type {
-	// Type = int | bool | char | float
+	// Type = int | bool | char | float | str
 	final static Type INT = new Type("int");
 	final static Type BOOL = new Type("bool");
 	final static Type CHAR = new Type("char");
 	final static Type FLOAT = new Type("float");
+	final static Type STR = new Type("str");
 	// final static Type UNDEFINED = new Type("undef");
 
 	private String id;
@@ -83,18 +44,7 @@ class Type {
 	}
 }
 
-abstract class Statement {
-	// Statement = Skip | Block | Assignment | Conditional | Loop
-
-}
-
-class Skip extends Statement {
-	public String toString() {
-		return Program.tab() + "Skip";
-	}
-}
-
-class Block extends Statement {
+class Block {
 	// Block = Statement*
 	// (a Vector of members)
 	public ArrayList<Statement> members = new ArrayList<Statement>();
@@ -109,6 +59,18 @@ class Block extends Statement {
 		return str;
 	}
 }
+
+class Skip extends Block {
+	public String toString() {
+		return Program.tab() + "Skip";
+	}
+}
+
+abstract class Statement {
+	// Statement = Skip | Assignment | Conditional | Loop | Print
+}
+
+
 
 class Assignment extends Statement {
 	// Assignment = Variable target; Expression source
@@ -130,29 +92,27 @@ class Assignment extends Statement {
 }
 
 class Conditional extends Statement {
-//Conditional = Expression test; Statement thenbranch, elsebranch
+//Conditional = Expression test; Block thenbranch, elsebranch
 	Expression test;
-	Statement thenbranch, elsebranch;
+	Block thenbranch, elsebranch;
 	// elsebranch == null means "if... then"
 
-	Conditional(Expression t, Statement tp) {
+	Conditional(Expression t, Block tp) {
 		test = t;
 		thenbranch = tp;
 		elsebranch = new Skip();
 	}
 
-	Conditional(Expression t, Statement tp, Statement ep) {
+	Conditional(Expression t, Block tp, Block ep) {
 		test = t;
 		thenbranch = tp;
 		elsebranch = ep;
 	}
-	
+
 	public String toString() {
 		String str = Program.tab() + "if";
 		Program.tabs++;
-		str += "\n" + Program.tab() + test
-				+ "\n" + thenbranch
-				+ "\n" + elsebranch;
+		str += "\n" + Program.tab() + test + "\n" + thenbranch + "\n" + elsebranch;
 		Program.tabs--;
 		return str;
 	}
@@ -172,6 +132,23 @@ class Loop extends Statement {
 		String str = Program.tab() + "while";
 		Program.tabs++;
 		str += "\n" + Program.tab() + test + "\n" + body;
+		Program.tabs--;
+		return str;
+	}
+}
+
+class Print extends Statement {
+	// Print = Expression source
+	Expression source;
+
+	Print(Expression string) {
+		source = string;
+	}
+
+	public String toString() {
+		String str = Program.tab() + "while";
+		Program.tabs++;
+		str += "\n" + Program.tab() + source;
 		Program.tabs--;
 		return str;
 	}
@@ -231,6 +208,11 @@ abstract class Value extends Expression {
 		return 0.0f;
 	}
 
+	String strValue() {
+		assert false : "should never reach here";
+		return " ";
+	}
+
 	boolean isUndef() {
 		return undef;
 	}
@@ -248,6 +230,8 @@ abstract class Value extends Expression {
 			return new CharValue();
 		if (type == Type.FLOAT)
 			return new FloatValue();
+		if (type == Type.STR)
+			return new StrValue();
 		throw new IllegalArgumentException("Illegal type in mkValue");
 	}
 }
@@ -350,6 +334,32 @@ class FloatValue extends Value {
 
 	float floatValue() {
 		assert !undef : "reference to undefined float value";
+		return value;
+	}
+
+	public String toString() {
+		if (undef)
+			return "undef";
+		return "" + value;
+	}
+
+}
+
+class StrValue extends Value {
+	private String value = " ";
+
+	StrValue() {
+		type = Type.STR;
+	}
+
+	StrValue(String v) {
+		this();
+		value = v;
+		undef = false;
+	}
+
+	String strValue() {
+		assert !undef : "reference to undefined char value";
 		return value;
 	}
 
