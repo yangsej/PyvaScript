@@ -15,11 +15,8 @@ public class Token {
     public static final Token floatTok = new Token(TokenType.Float, "float");
     public static final Token ifTok = new Token(TokenType.If, "if");
     public static final Token intTok = new Token(TokenType.Int, "int");
-    public static final Token mainTok = new Token(TokenType.Main, "main");
     public static final Token trueTok = new Token(TokenType.True, "true");
     public static final Token whileTok = new Token(TokenType.While, "while");
-    public static final Token leftBraceTok = new Token(TokenType.LeftBrace, "{");
-    public static final Token rightBraceTok = new Token(TokenType.RightBrace, "}");
     public static final Token leftBracketTok = new Token(TokenType.LeftBracket, "[");
     public static final Token rightBracketTok = new Token(TokenType.RightBracket, "]");
     public static final Token leftParenTok = new Token(TokenType.LeftParen, "(");
@@ -40,7 +37,14 @@ public class Token {
     public static final Token divideTok = new Token(TokenType.Divide, "/");
     public static final Token andTok = new Token(TokenType.And, "&&");
     public static final Token orTok = new Token(TokenType.Or, "||");
-
+    
+    public static final Token strTok = new Token(TokenType.Str, "str");
+    public static final Token colonTok = new Token(TokenType.Colon, ":");
+    public static final Token tabTok = new Token(TokenType.Tab, "\t");
+    public static final Token spaceTok = new Token(TokenType.Space, " ");
+    public static final Token enterTok = new Token(TokenType.Enter, "\n");
+    
+    
     private TokenType type;
     private String value = "";
 
@@ -92,3 +96,4 @@ public class Token {
         System.out.println(whileTok);
     }
 } // Token
+
