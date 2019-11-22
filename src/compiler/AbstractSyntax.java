@@ -50,7 +50,7 @@ class Block {
 	public ArrayList<Statement> members = new ArrayList<Statement>();
 
 	public String toString() {
-		String str = Program.tab() + "Block";
+		String str = Program.tab() + ":";
 		Program.tabs++;
 		for (Statement sta : members) {
 			str += "\n" + sta;
@@ -62,12 +62,20 @@ class Block {
 
 class Skip extends Block {
 	public String toString() {
-		return Program.tab() + "Skip";
+		return Program.tab() + "Block_Skip";
 	}
 }
 
 abstract class Statement {
+	public int space = 0;
 	// Statement = Skip | Assignment | Conditional | Loop | Print
+}
+
+
+class Statement_Skip extends Statement {
+	public String toString() {
+		return Program.tab() + "Statement_Skip";
+	}
 }
 
 
@@ -112,7 +120,7 @@ class Conditional extends Statement {
 	public String toString() {
 		String str = Program.tab() + "if";
 		Program.tabs++;
-		str += "\n" + Program.tab() + test + "\n" + thenbranch + "\n" + elsebranch;
+		str += "\n" + Program.tab() + test + "\n then" + thenbranch + "\n else" + elsebranch;
 		Program.tabs--;
 		return str;
 	}
@@ -121,9 +129,9 @@ class Conditional extends Statement {
 class Loop extends Statement {
 //Loop = Expression test; Statement body
 	Expression test;
-	Statement body;
+	Block body;
 
-	Loop(Expression t, Statement b) {
+	Loop(Expression t, Block b) {
 		test = t;
 		body = b;
 	}
@@ -173,7 +181,7 @@ class Variable extends Expression {
 
 	public boolean equals(Object obj) {
 		String s = ((Variable) obj).id;
-		return id.equals(s); // case-sensitive identifiers
+		return id == s; // case-sensitive identifiers
 	}
 
 	public int hashCode() {
@@ -494,39 +502,39 @@ class Operator {
 	}
 
 	public boolean equals(Object obj) {
-		return val.equals(obj);
+		return val == obj;
 	}
 
 	boolean BooleanOp() {
-		return val.equals(AND) || val.equals(OR);
+		return val == AND || val == OR;
 	}
 
 	boolean RelationalOp() {
-		return val.equals(LT) || val.equals(LE) || val.equals(EQ) || val.equals(NE) || val.equals(GT) || val.equals(GE);
+		return val == LT || val == LE || val == EQ || val == NE || val == GT || val == GE;
 	}
 
 	boolean ArithmeticOp() {
-		return val.equals(PLUS) || val.equals(MINUS) || val.equals(TIMES) || val.equals(DIV);
+		return val == PLUS || val == MINUS || val == TIMES || val == DIV;
 	}
 
 	boolean NotOp() {
-		return val.equals(NOT);
+		return val == NOT;
 	}
 
 	boolean NegateOp() {
-		return val.equals(NEG);
+		return val == NEG;
 	}
 
 	boolean intOp() {
-		return val.equals(INT);
+		return val == INT;
 	}
 
 	boolean floatOp() {
-		return val.equals(FLOAT);
+		return val == FLOAT;
 	}
 
 	boolean charOp() {
-		return val.equals(CHAR);
+		return val == CHAR;
 	}
 
 	final static String intMap[][] = { { PLUS, INT_PLUS }, { MINUS, INT_MINUS }, { TIMES, INT_TIMES }, { DIV, INT_DIV },
@@ -545,7 +553,7 @@ class Operator {
 
 	final static private Operator map(String[][] tmap, String op) {
 		for (int i = 0; i < tmap.length; i++)
-			if (tmap[i][0].equals(op))
+			if (tmap[i][0] == op)
 				return new Operator(tmap[i][1]);
 		assert false : "should never reach here";
 		return null;
