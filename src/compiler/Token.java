@@ -85,6 +85,10 @@ public class Token {
     public static Token mkCharLiteral (String name) {
         return new Token(TokenType.CharLiteral, name);
     }
+    
+    public static Token mkStrLiteral (String name) {
+        return new Token(TokenType.StrLiteral, name);
+    }
 
     public String toString ( ) {
         if (type.compareTo(TokenType.Identifier) < 0) return value;

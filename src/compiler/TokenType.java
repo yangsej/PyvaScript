@@ -3,6 +3,9 @@ package compiler;
 public enum TokenType {
     Bool, Char, Else, False, Float,
      If, Int, True, While,
+     
+     Str, 
+     
     Eof, LeftBracket, RightBracket,
     LeftParen, RightParen, Semicolon, Comma, Assign,
     Equals, Less, LessEqual, Greater, GreaterEqual,
@@ -11,5 +14,5 @@ public enum TokenType {
     FloatLiteral, CharLiteral,
     
     
-    StrLiteral, Str, Colon, Tab, Space, Enter
+    StrLiteral, Colon, Tab, Space, Enter
 }

@@ -18,6 +18,7 @@ public class Lexer {
     private final String digits = "0123456789";
     private final char eolnCh = '\n';
     private final char eofCh = '\004';
+    private String strtemp="";
     
 
     public Lexer (String fileName) { // source filename
@@ -53,7 +54,7 @@ public class Lexer {
         return line.charAt(col);
     }
        
-    public int getLineNum() { // line 수를 반환하는 함수
+    public int getLineNum() { // line �닔瑜� 諛섑솚�븯�뒗 �븿�닔
         return lineno;
     } 
 
@@ -85,6 +86,19 @@ public class Lexer {
                 ch = nextChar();
                 return Token.enterTok;
                 //break;
+                
+            case '\"':  // String literal
+                do {
+                    ch = nextChar();
+                    if(ch!='\"')
+                    	strtemp+=ch;
+                } while (ch != '\"');
+                ch = nextChar();
+                return Token.mkStrLiteral(strtemp);
+                //char ch1 = nextChar();
+                //nextChar(); // get '
+                //ch = nextChar();
+                //return Token.mkCharLiteral("" + ch1); 
             
             case '/':  // divide or comment
                 ch = nextChar();
@@ -147,8 +161,7 @@ public class Lexer {
         } while (true);
     } // next
 
-
-    private boolean isLetter(char c) {
+	private boolean isLetter(char c) {
         return (c>='a' && c<='z' || c>='A' && c<='Z');
     }
   
