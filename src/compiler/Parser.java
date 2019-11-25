@@ -41,7 +41,7 @@ public class Parser {
 		Block b = new Block();
 		// 탭 수를 확인해 계산
 		while (token.type() != TokenType.Eof) {
-			System.out.println(lexer.getSpaceNum() + " " + token);
+//			System.out.println(lexer.getSpaceNum() + " " + token);
 //			if(token.type() == TokenType.Space
 //			|| token.type() == TokenType.Tab
 //			|| token.type() == TokenType.Enter) {
@@ -49,16 +49,22 @@ public class Parser {
 //				continue;
 //			}
 			Statement s = statement();
-			if(s.getClass() == Statement_Skip.class) continue;
-			if(state_pre != null) {
-				b.members.add(state_pre);
-				state_pre = null;
-			} else if(b.members.size() > 0 && s.space < b.members.get(b.members.size()-1).space) {
+			if(s.getClass() == Statement_Skip.class) {
+				continue;
+			}
+			if(b.members.size() > 0 && s.space < b.members.get(b.members.size()-1).space) {
+//				System.out.println("End of Block : " + s);
 				state_pre = s;
 				break;
 			}
 				
 			b.members.add(s);
+			
+
+			if(state_pre != null && state_pre.space == b.members.get(b.members.size()-1).space) {
+				b.members.add(state_pre);
+				state_pre = null;
+			}
 		}
 		return b;
 	}

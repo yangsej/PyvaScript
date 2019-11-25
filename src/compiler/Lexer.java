@@ -20,7 +20,7 @@ public class Lexer {
 	private String strtemp = "";
 	
 	private int space_cur = 0;
-	private int space_pre = 0;
+//	private int space_pre = 0;
 
 	public Lexer(String fileName) { // source filename
 		try {
@@ -63,9 +63,10 @@ public class Lexer {
 
 	public Token next() { // Return next token
 		do {
-			space_pre = 0; space_cur = 0;
+//			space_pre = 0;
+			space_cur = 0;
 			while(ch == ' ' || ch == '\t') {
-				space_pre = space_cur;
+//				space_pre = space_cur;
 				if(ch == ' ') space_cur++;
 				else space_cur+=4;
 				ch = nextChar();

@@ -120,7 +120,7 @@ class Conditional extends Statement {
 	public String toString() {
 		String str = Program.tab() + "if";
 		Program.tabs++;
-		str += "\n" + Program.tab() + test + "\n then" + thenbranch + "\n else" + elsebranch;
+		str += "\n" + Program.tab() + test + "\n" + thenbranch + "\n" + elsebranch;
 		Program.tabs--;
 		return str;
 	}
@@ -550,6 +550,9 @@ class Operator {
 
 	final static String boolMap[][] = { { EQ, BOOL_EQ }, { NE, BOOL_NE }, { LT, BOOL_LT }, { LE, BOOL_LE },
 			{ GT, BOOL_GT }, { GE, BOOL_GE }, };
+	
+//	final static String strMap[][] = { { EQ, CHAR_EQ }, { NE, CHAR_NE }, { LT, CHAR_LT }, { LE, CHAR_LE },
+//			{ GT, CHAR_GT }, { GE, CHAR_GE }, { INT, C2I } };
 
 	final static private Operator map(String[][] tmap, String op) {
 		for (int i = 0; i < tmap.length; i++)
