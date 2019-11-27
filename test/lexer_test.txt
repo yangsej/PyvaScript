@@ -2,6 +2,7 @@
 even=0
 i=0
 dk = "asdfasdf"
+a = [1,'a', [7, 3.4, 'c', 4.8],3]
 
 
 while i < 10 :

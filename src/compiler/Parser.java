@@ -217,12 +217,24 @@ public class Parser {
 		Expression e = null;
 		if (token.type() == TokenType.Identifier) {
 			e = new Variable(match(TokenType.Identifier));
+			//printf("%d\n", token.type());
+			//if()
 		} else if (isLiteral()) {
 			e = literal();
 		} else if (token.type() == TokenType.LeftParen) {
 			token = lexer.next();
 			e = expression();
 			match(TokenType.RightParen);
+		} else if (token.type() == TokenType.LeftBracket) {
+			token = lexer.next();
+			List l = new List();
+			while(token.type() != TokenType.RightBracket) {
+				l.members.add(expression());
+				if(token.type() == TokenType.Comma)
+					token = lexer.next();
+			}
+			token = lexer.next();
+			return l;
 		} else
 			error("Identifier | Literal | ( | Type");
 		return e;
