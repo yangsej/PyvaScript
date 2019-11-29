@@ -44,11 +44,52 @@ class Type {
 	}
 }
 
-class Block {
+//class Block {
+//	// Block = Statement*
+//	// (a Vector of members)
+//	public ArrayList<Statement> members = new ArrayList<Statement>();
+//
+//	public String toString() {
+//		String str = Program.tab() + ":";
+//		Program.tabs++;
+//		for (Statement sta : members) {
+//			str += "\n" + sta;
+//		}
+//		Program.tabs--;
+//		return str;
+//	}
+//}
+
+//class Skip extends Block {
+//	public String toString() {
+//		return Program.tab() + "Block_Skip";
+//	}
+//}
+
+abstract class Statement {
+	public int space = -1;
+	// Statement = Skip | Assignment | Conditional | Loop | Print
+}
+
+
+//class Statement_Skip extends Statement {
+//	public String toString() {
+//		return Program.tab() + "Statement_Skip";
+//	}
+//}
+
+class Skip extends Statement {
+	public String toString() {
+		return Program.tab() + "Skip";
+	}
+}
+
+class Block extends Statement{
 	// Block = Statement*
 	// (a Vector of members)
 	public ArrayList<Statement> members = new ArrayList<Statement>();
-
+	
+	
 	public String toString() {
 		String str = Program.tab() + ":";
 		Program.tabs++;
@@ -57,24 +98,6 @@ class Block {
 		}
 		Program.tabs--;
 		return str;
-	}
-}
-
-class Skip extends Block {
-	public String toString() {
-		return Program.tab() + "Block_Skip";
-	}
-}
-
-abstract class Statement {
-	public int space = 0;
-	// Statement = Skip | Assignment | Conditional | Loop | Print
-}
-
-
-class Statement_Skip extends Statement {
-	public String toString() {
-		return Program.tab() + "Statement_Skip";
 	}
 }
 
@@ -102,16 +125,16 @@ class Assignment extends Statement {
 class Conditional extends Statement {
 //Conditional = Expression test; Block thenbranch, elsebranch
 	Expression test;
-	Block thenbranch, elsebranch;
+	Statement thenbranch, elsebranch;
 	// elsebranch == null means "if... then"
 
-	Conditional(Expression t, Block tp) {
+	Conditional(Expression t, Statement tp) {
 		test = t;
 		thenbranch = tp;
 		elsebranch = new Skip();
 	}
 
-	Conditional(Expression t, Block tp, Block ep) {
+	Conditional(Expression t, Statement tp, Statement ep) {
 		test = t;
 		thenbranch = tp;
 		elsebranch = ep;
@@ -129,9 +152,9 @@ class Conditional extends Statement {
 class Loop extends Statement {
 //Loop = Expression test; Statement body
 	Expression test;
-	Block body;
+	Statement body;
 
-	Loop(Expression t, Block b) {
+	Loop(Expression t, Statement b) {
 		test = t;
 		body = b;
 	}

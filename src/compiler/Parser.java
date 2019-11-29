@@ -4,8 +4,7 @@ public class Parser {
 	Token token; // current token from the input stream
 	Lexer lexer;
 	
-	static int tabs = 0;
-	Statement state_pre = null;
+	private Statement s_pre = null;
 
 	public Parser(Lexer ts) { // Open the C++Lite source program
 		lexer = ts; // as a token stream, and
@@ -30,61 +29,40 @@ public class Parser {
 		System.err.println("Syntax error: expecting: " + tok + "; saw: " + token);
 		System.exit(1);
 	}
+	private void error() {
+		System.err.println("Syntax error: expected an indented block");
+		System.exit(1);
+	}
 
 	public Program program() {
 		// Program --> Statements
-		return new Program(statements());
-	}
-	
-	private Block statements() {
-		// Block --> { Statement }
-		Block b = new Block();
-		// 탭 수를 확인해 계산
-		while (token.type() != TokenType.Eof) {
-//			System.out.println(lexer.getSpaceNum() + " " + token);
-//			if(token.type() == TokenType.Space
-//			|| token.type() == TokenType.Tab
-//			|| token.type() == TokenType.Enter) {
-//				token = lexer.next();
-//				continue;
-//			}
-			Statement s = statement();
-			if(s.getClass() == Statement_Skip.class) {
-				continue;
-			}
-			if(b.members.size() > 0 && s.space < b.members.get(b.members.size()-1).space) {
-//				System.out.println("End of Block : " + s);
-				state_pre = s;
-				break;
-			}
-				
-			b.members.add(s);
-			
-
-			if(state_pre != null && state_pre.space == b.members.get(b.members.size()-1).space) {
-				b.members.add(state_pre);
-				state_pre = null;
-			}
-		}
-		return b;
+		
+		return new Program(statements(-1));
 	}
 
 	private Statement statement() {
-		// Statement --> Skip | Assignment | IfStatement | 
+		// Statement --> Skip | Block | Assignment | IfStatement | 
 		// WhileStatement | PrintStatement
-//		System.out.println(lexer.getSpaceNum() + " " + token);
-		Statement s = new Statement_Skip();
-		int space_temp = lexer.getSpaceNum();
+		
+		Statement s = new Skip();
+		int space = lexer.getSpaceNum();
 		if(token.type() == TokenType.Identifier)
 			s = assignment();
+		else if(token.type() == TokenType.Colon)
+			s = statements(space);
 		else if(token.type() == TokenType.If)
 			s = ifStatement();
+		else if(token.type() == TokenType.Else)
+			error();
 		else if(token.type() == TokenType.While)
 			s = whileStatement();
 		else if(token.type() == TokenType.Print)
 			s = printStatement();
-		if(token.type() == TokenType.Enter) token = lexer.next();
-		s.space = space_temp;
+		
+		if(token.type() == TokenType.Enter)
+			token = lexer.next();
+
+		s.space = space;
 		return s;
 	}
 
@@ -99,21 +77,61 @@ public class Parser {
 		Expression source = expression();
 		return new Assignment(target, source); // student exercise
 	}
+	
+	private Block statements(int space) {
+		// Block --> Statement { Statement }
+		Block b = new Block();
+		
+		if(token.type() == TokenType.Colon) token = lexer.next();
+		while(token.type() == TokenType.Enter) token = lexer.next();
+		b.space = lexer.getSpaceNum();
+		if(b.space <= space) error();
+
+		Statement s_cur = statement();
+		b.members.add(s_cur);
+		
+		while (token.type() != TokenType.Eof) {
+			if(token.type() == TokenType.Enter) {
+				token = lexer.next();
+				continue;
+			}
+			if(lexer.getSpaceNum() != b.members.get(0).space) {
+				break;
+			}
+			s_cur = statement();
+			
+			if(s_cur.space == b.members.get(0).space) {
+				b.members.add(s_cur);
+			} else {
+				s_pre = s_cur;
+				break;
+			}
+			
+			if(s_pre != null) {
+				if(s_pre.space == b.members.get(0).space) {
+					b.members.add(s_pre);
+					s_pre = null;
+				}
+			}
+		}
+		return b;
+	}
 
 	private Conditional ifStatement() {
 		// IfStatement --> if Expression : Statements [ else Statements ]
+		int if_space = lexer.getSpaceNum();
 		match(TokenType.If);
 		Expression test = expression();
-		match(TokenType.Colon);
-		match(TokenType.Enter);
-		Block thenbranch = statements(), elsebranch = null;
+		
+		Statement thenbranch = statements(if_space), elsebranch = null;
 		Conditional cond = null;
 		if (token.type() == TokenType.Else) {
 			token = lexer.next();
-			elsebranch = statements();
+			elsebranch = statements(if_space);
 			cond = new Conditional(test, thenbranch, elsebranch);
 		} else
 			cond = new Conditional(test, thenbranch);
+		cond.space = if_space;
 		return cond;
 	}
 
@@ -121,9 +139,7 @@ public class Parser {
 		// WhileStatement --> while Expression : Statements
 		match(TokenType.While);
 		Expression test = expression();
-		match(TokenType.Colon);
-		match(TokenType.Enter);
-		return new Loop(test, statements()); // student exercise
+		return new Loop(test, statement()); // student exercise
 	}
 
 	private Print printStatement() {

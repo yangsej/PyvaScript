@@ -19,8 +19,7 @@ public class Lexer {
 	private final char eofCh = '\004';
 	private String strtemp = "";
 	
-	private int space_cur = 0;
-//	private int space_pre = 0;
+	private int space = 0;
 
 	public Lexer(String fileName) { // source filename
 		try {
@@ -58,21 +57,17 @@ public class Lexer {
 		return lineno;
 	}
 	public int getSpaceNum() { // line 계산
-		return space_cur;
+		return space;
 	}
 
 	public Token next() { // Return next token
 		do {
-//			space_pre = 0;
-			space_cur = 0;
+			space = 0;
 			while(ch == ' ' || ch == '\t') {
-//				space_pre = space_cur;
-				if(ch == ' ') space_cur++;
-				else space_cur+=4;
+				if(ch == ' ') space++;
+				else space+=4;
 				ch = nextChar();
 			}
-//			System.out.println(space_cur);
-			
 			
 			if (isLetter(ch)) { // ident or keyword
 				String spelling = concat(letters + digits);
@@ -85,16 +80,6 @@ public class Lexer {
 				return Token.mkFloatLiteral(number);
 			} else
 				switch (ch) {
-//				case ' ':
-//					space_pre = space_cur;
-//					space_cur++;
-//					ch = nextChar();
-//					break;
-//				case '\t':
-//					space_pre = space_cur;
-//					space_cur+=4;
-//					ch = nextChar();
-//					break;
 				case eolnCh:
 					ch = nextChar();
 					return Token.enterTok;
