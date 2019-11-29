@@ -9,13 +9,11 @@ import java.util.*;
 //functions use the classes in the Abstract Syntax of Clite.
 
 
-public class StaticTypeChecker {
+public class StaticTypeCheck {
+    TypeMap map = new TypeMap();
 
-
- public static TypeMap typing (Declarations d) {
-     TypeMap map = new TypeMap();
-     for (Declaration di : d) 
-         map.put (di.v, di.t);
+ public static TypeMap typing (Assignment a) {
+	 map.put(a.target, a.source);
      return map;
  }
 

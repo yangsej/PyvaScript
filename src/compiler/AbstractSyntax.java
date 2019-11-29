@@ -204,7 +204,7 @@ class Variable extends Expression {
 
 	public boolean equals(Object obj) {
 		String s = ((Variable) obj).id;
-		return id == s; // case-sensitive identifiers
+		return id.equals(s); // case-sensitive identifiers
 	}
 
 	public int hashCode() {

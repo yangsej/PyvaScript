@@ -3,7 +3,7 @@ package compiler;
 import java.util.*; 
 
  
-public class State extends HashMap<Variable, Value> {  
+public class State extends HashMap<Variable, Value> {
     // Defines the set of variables and their associated values  
     // that are active during interpretation 
      
@@ -22,5 +22,10 @@ public class State extends HashMap<Variable, Value> {
         for (Variable key : t.keySet( )) 
             put(key, t.get(key)); 
         return this; 
-    } 
+    }
+
+	public void display() {
+		// TODO Auto-generated method stub
+		System.out.println(this.toString());
+	} 
 } 
