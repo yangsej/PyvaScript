@@ -1,0 +1,18 @@
+
+even=0
+i=0
+dk = "asdfasdf"
+//a=1.1
+
+while i < 10 :
+	i = i+1
+	if i == (i/2)*2 : 
+		even = even +1
+    
+		i = even + 23
+	else :
+		even=-1
+		while j > 0:
+			j = 3
+c='A'
+ // main
