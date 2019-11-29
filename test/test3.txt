@@ -14,5 +14,6 @@ while i < 10 :
 		even=-1
 		while j > 0:
 			j = 3
+			l = [1, 2, 'a', []]
 c='A'
  // main
