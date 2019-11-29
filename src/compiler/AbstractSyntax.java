@@ -266,6 +266,13 @@ abstract class Value extends Expression {
 		throw new IllegalArgumentException("Illegal type in mkValue");
 	}
 }
+class List extends Expression{
+	public ArrayList<Expression> members = new ArrayList<Expression>();
+	
+	public String toString(){
+		return this.members.toString();
+	}
+}
 
 class IntValue extends Value {
 	private int value = 0;
