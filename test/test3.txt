@@ -10,6 +10,8 @@ while even < 10 :
 	if i == (i/2)*2 : 
 		even = even +1
 		i = even + 23
+		if j == 3 :
+			j = j + 1
 	else :
 		even=-1
 		while j > 0:
