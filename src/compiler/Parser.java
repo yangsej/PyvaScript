@@ -125,7 +125,7 @@ public class Parser {
 		
 		Statement thenbranch = statements(if_space), elsebranch = null;
 		Conditional cond = null;
-		if (token.type() == TokenType.Else) {
+		if (token.type() == TokenType.Else && lexer.getSpaceNum() == if_space) {
 			token = lexer.next();
 			elsebranch = statements(if_space);
 			cond = new Conditional(test, thenbranch, elsebranch);
