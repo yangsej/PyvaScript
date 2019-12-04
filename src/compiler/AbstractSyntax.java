@@ -177,8 +177,28 @@ class Print extends Statement {
 	}
 
 	public String toString() {
-		String str = Program.tab() + "while";
+		String str = Program.tab() + "print";
 		Program.tabs++;
+		str += "\n" + Program.tab() + source;
+		Program.tabs--;
+		return str;
+	}
+}
+
+class Input extends Statement {
+	// Print = Expression source
+	Variable id;
+	Expression source;
+
+	Input(Variable i, Expression s) {
+		id = i;
+		source = s;
+	}
+
+	public String toString() {
+		String str = Program.tab() + "input";
+		Program.tabs++;
+		str += "\n" + Program.tab() + id;
 		str += "\n" + Program.tab() + source;
 		Program.tabs--;
 		return str;
@@ -213,9 +233,32 @@ class Variable extends Expression {
 
 }
 
+//class InputVariable extends Variable {
+//	// Variable = String id
+//	private String id;
+//	Expression source;
+//
+//	InputVariable(Expression string) {
+//		id = "input";
+//		source = string;
+//	}
+//
+//	public boolean equals(Object obj) {
+//		String s = ((Variable) obj).id;
+//		return id.equals(s); // case-sensitive identifiers
+//	}
+//
+//	public String toString() {
+//		String str = id;
+//		Program.tabs++;
+//		str += "\n" + Program.tab() + source;
+//		Program.tabs--;
+//		return str;
+//	}
+//}
+
 abstract class Value extends Expression {
-	// Value = IntValue | BoolValue |
-	// CharValue | FloatValue
+	// Value = IntValue | BoolValue | CharValue | FloatValue
 	protected Type type;
 	protected boolean undef = true;
 

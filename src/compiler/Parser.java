@@ -42,14 +42,14 @@ public class Parser {
 
 	private Statement statement() {
 		// Statement --> Skip | Block | Assignment | IfStatement | 
-		// WhileStatement | PrintStatement
+		// WhileStatement | PrintStatement | InputStatement
 		
 		Statement s = new Skip();
 		int space = lexer.getSpaceNum();
 		if(token.type() == TokenType.Identifier)
 			s = assignment();
-		else if(token.type() == TokenType.Colon)
-			s = statements(space);
+//		else if(token.type() == TokenType.Colon)
+//			s = statements(space);
 		else if(token.type() == TokenType.If)
 			s = ifStatement();
 		else if(token.type() == TokenType.Else)
@@ -58,6 +58,8 @@ public class Parser {
 			s = whileStatement();
 		else if(token.type() == TokenType.Print)
 			s = printStatement();
+		else if(token.type() == TokenType.Input)
+			s = inputStatement();
 		
 		if(token.type() == TokenType.Enter)
 			token = lexer.next();
@@ -137,9 +139,10 @@ public class Parser {
 
 	private Loop whileStatement() {
 		// WhileStatement --> while Expression : Statements
+		int space = lexer.getSpaceNum();
 		match(TokenType.While);
 		Expression test = expression();
-		return new Loop(test, statement()); // student exercise
+		return new Loop(test, statements(space)); // student exercise
 	}
 
 	private Print printStatement() {
@@ -149,6 +152,17 @@ public class Parser {
 		Expression source = expression();
 		match(TokenType.RightParen);
 		return new Print(source);
+	}
+	
+	private Input inputStatement() {
+		// InputStatement --> input '(' Expression ')'
+		match(TokenType.Input);
+		match(TokenType.LeftParen);
+		Variable id = new Variable(match(TokenType.Identifier));
+		match(TokenType.Comma);
+		Expression source = expression();
+		match(TokenType.RightParen);
+		return new Input(id, source);
 	}
 
 	private Expression expression() {
@@ -229,7 +243,7 @@ public class Parser {
 	}
 
 	private Expression primary() {
-		// Primary --> Identifier | Literal | ( Expression )
+		// Primary --> Identifier | Literal | ( Expression ) | Input
 		Expression e = null;
 		if (token.type() == TokenType.Identifier) {
 			e = new Variable(match(TokenType.Identifier));
@@ -251,10 +265,21 @@ public class Parser {
 			}
 			token = lexer.next();
 			return l;
-		} else
+//		} else if (token.type() == TokenType.Input){
+//			return inputExpression();
+		} else 
 			error("Identifier | Literal | ( | Type");
 		return e;
 	}
+	
+//	private Expression inputExpression() {
+//		// InputStatement --> input '(' Expression ')'
+//		match(TokenType.Input);
+//		match(TokenType.LeftParen);
+//		Expression source = expression();
+//		match(TokenType.RightParen);
+//		return new InputExpression(source);
+//	}
 
 	private Value literal() {
 		Value v = null;
