@@ -7,14 +7,14 @@ dk = "asdfasdf"
 test1 = "56" + 8
 //a=1.1
 
-//arr[2][1]=2
-//asdf[3]='5'
+arr[2][1]=2
+asdf[3]='5'
 
 input(k, "statement!!!")
 print(k)
 
 while even < 10 :
-	i = i+1
+	i = i+1 + asdf[3]
 	print(i + j)
 	if i == (i/2)*2 : 
 		even = even +1

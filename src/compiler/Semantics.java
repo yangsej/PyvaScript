@@ -1,5 +1,7 @@
 package compiler;
 
+import java.util.ArrayList;
+
 // Following is the semantics class: 
 // The meaning M of a Statement is a State 
 // The meaning M of a Expression is a Value 
@@ -41,6 +43,37 @@ public class Semantics {
     } 
    
     State M (Assignment a, State state) { 
+    	if(a.target instanceof ListItem) {
+    		ListItem li = (ListItem) a.target;
+
+    		// 1차원
+    		List l = (List) state.get(li);
+    		ArrayList<Expression> members = l.list();
+
+    		
+    		// 2차원
+    		Expression temp = members.get(M(li.index.get(0), state).intValue());
+    		if(temp instanceof List) {
+        		l = (List)temp;
+        		members = l.list();	
+        		members.set(M(li.index.get(1), state).intValue(), M(a.source, state));
+    		} else {
+        		members.set(M(li.index.get(0), state).intValue(), M(a.source, state));
+    		}
+//    		temp = members.get(M(li.index.get(1), state).intValue());
+    		
+
+    		
+    	
+    		
+    		
+//    		Expression value;
+//    		for(Expression i : li.index) {
+//    			value = members.get(M(i, state).intValue());
+//    		}
+    		return state;
+//    		return state.onion(a.target, l/*new List(members)*/); 
+    	}
         return state.onion(a.target, M (a.source, state)); 
     } 
    
@@ -72,7 +105,7 @@ public class Semantics {
         return state.onion(i.id, M(i.source, state));
     }
 
-    Value applyBinary (Operator op, Value v1, Value v2) { 
+    Value applyBinary (Operator op, Value v1, Value v2) {
         if(v1 == null || v2 == null) {
         	System.err.println("reference to undeclared value");
             System.exit(1);
@@ -288,15 +321,32 @@ public class Semantics {
     }  
 
     Value M (Expression e, State state) {
-        if (e instanceof Value)  
+    	System.out.println(e);
+        if (e instanceof Value) {
+//            if (e instanceof List) {
+//            	
+//            }
             return (Value)e; 
+        }
         if (e instanceof Variable) {
           	if(!state.containsKey(e)){
             	System.err.println("reference to undeclared variable");
                 System.exit(1);
             }
+          	
+          	if(e instanceof ListItem) {
+            	ListItem li = (ListItem) e;
+          		ArrayList<Expression> members = state.get(li).list(), pointer = members;
+          		
+//        		for(Expression i : li.index) {
+//        			pointer = M(members.get(M(i, state).intValue()), state).list();
+//        		}
+          		return (Value) members.get(M(li.index.get(0), state).intValue());
+          	}
+          	
         	return (Value)(state.get(e));
         }
+        
         if (e instanceof Binary) { 
             Binary b = (Binary)e; 
             return applyBinary (b.op,  
@@ -308,6 +358,11 @@ public class Semantics {
         } 
         throw new IllegalArgumentException("should never reach here"); 
     } 
+    
+    List M(List l, State state) {
+    	
+		return l;
+    }
 
     public static void main(String args[]) { 
         Parser parser  = new Parser(new Lexer(args[0])); 

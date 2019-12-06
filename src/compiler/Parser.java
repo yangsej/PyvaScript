@@ -1,9 +1,10 @@
 package compiler;
 
+import java.util.ArrayList;
+
 public class Parser {
 	Token token; // current token from the input stream
 	Lexer lexer;
-	static String ListIndex = "";
 	
 	private Statement s_pre = null;
 
@@ -75,18 +76,14 @@ public class Parser {
 		if (token.type() == TokenType.Identifier) {
 			target = new Variable(token.value());
 			token = lexer.next();
-			if(token.type() == TokenType.LeftBracket) {
-				ListIndex="";
-				ListIndex+="[";
-				token = lexer.next();
-				while(token.type() != TokenType.Assign) {
-					ListIndex += token.value();
-					token = lexer.next();
-				}
-					//ListIndex += lexer.next().value();
-				System.out.println(ListIndex);
+
+			ArrayList<Expression> index = new ArrayList<Expression>();
+			while(token.type() == TokenType.LeftBracket) {
+				match(TokenType.LeftBracket);
+				index.add(expression());
+				match(TokenType.RightBracket);
 			}
-			
+			if(!index.isEmpty()) target = new ListItem(target.id, index);
 		}
 		match(TokenType.Assign);
 		Expression source = expression();
@@ -256,12 +253,19 @@ public class Parser {
 	}
 
 	private Expression primary() {
-		// Primary --> Identifier | Literal | ( Expression ) | Input
+		// Primary --> Identifier{'['Expression']'} | Literal | ( Expression ) | Input
 		Expression e = null;
 		if (token.type() == TokenType.Identifier) {
-			e = new Variable(match(TokenType.Identifier));
-			//printf("%d\n", token.type());
-			//if()
+			Variable target = new Variable(token.value());
+			token = lexer.next();
+			ArrayList<Expression> index = new ArrayList<Expression>();
+			while(token.type() == TokenType.LeftBracket) {
+				match(TokenType.LeftBracket);
+				index.add(expression());
+				match(TokenType.RightBracket);
+			}
+			if(!index.isEmpty()) target = new ListItem(target.id, index);
+			e = target;
 		} else if (isLiteral()) {
 			e = literal();
 		} else if (token.type() == TokenType.LeftParen) {

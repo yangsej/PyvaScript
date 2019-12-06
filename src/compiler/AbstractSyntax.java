@@ -31,6 +31,7 @@ class Type {
 	final static Type CHAR = new Type("char");
 	final static Type FLOAT = new Type("float");
 	final static Type STR = new Type("str");
+	final static Type LIST = new Type("list");
 	// final static Type UNDEFINED = new Type("undef");
 
 	private String id;
@@ -116,11 +117,7 @@ class Assignment extends Statement {
 	public String toString() {
 		String str = Program.tab() + "=";
 		Program.tabs++;
-		if(Parser.ListIndex!="") {
-			str += "\n" + Program.tab() + target + Parser.ListIndex + "\n" + Program.tab() + source;
-		}else {
-			str += "\n" + Program.tab() + target + "\n" + Program.tab() + source;
-		}
+		str += "\n" + Program.tab() + target + "\n" + Program.tab() + source;
 		Program.tabs--;
 		return str;
 	}
@@ -216,7 +213,7 @@ abstract class Expression {
 
 class Variable extends Expression {
 	// Variable = String id
-	private String id;
+	protected String id;
 
 	Variable(String s) {
 		id = s;
@@ -235,6 +232,28 @@ class Variable extends Expression {
 		return id.hashCode();
 	}
 
+}
+
+class ListItem extends Variable {
+	// ListItem = String id | ArrayList<Expression> index
+	public ArrayList<Expression> index = new ArrayList<Expression>();
+	
+	ListItem(String s) {
+		super(s);
+	}
+	
+	ListItem(String s, ArrayList<Expression> i) {
+		super(s);
+		index = i;
+	}
+
+	public String toString() {
+		String str = id;
+		for(Expression e : index) {
+			str += "[" + e + "]";
+		}
+		return str;
+	}
 }
 
 //class InputVariable extends Variable {
@@ -290,6 +309,11 @@ abstract class Value extends Expression {
 		assert false : "should never reach here";
 		return " ";
 	}
+	
+	ArrayList<Expression> list() {
+		assert false : "should never reach here";
+		return new ArrayList<Expression>();
+	}
 
 	boolean isUndef() {
 		return undef;
@@ -310,14 +334,31 @@ abstract class Value extends Expression {
 			return new FloatValue();
 		if (type == Type.STR)
 			return new StrValue();
+		if (type == Type.LIST)
+			return new List();
 		throw new IllegalArgumentException("Illegal type in mkValue");
 	}
 }
-class List extends Expression{
+
+class List extends Value{
 	public ArrayList<Expression> members = new ArrayList<Expression>();
 	
+	List(){
+		type = Type.LIST;
+	}
+	
+	List(ArrayList<Expression> a){
+		this();
+		members = a;
+	}
+	
+	ArrayList<Expression> list() {
+		assert !undef : "reference to undefined list";
+		return members;
+	}
+	
 	public String toString(){
-		return this.members.toString();
+		return members.toString();
 	}
 }
 
