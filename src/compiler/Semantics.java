@@ -31,6 +31,8 @@ public class Semantics {
         if (s instanceof Conditional)  return M((Conditional)s, state); 
         if (s instanceof Loop)  return M((Loop)s, state); 
         if (s instanceof Block)  return M((Block)s, state); 
+        if (s instanceof Print)  return M((Print)s, state);
+        if (s instanceof Input)  return M((Input)s, state);
         throw new IllegalArgumentException("should never reach here"); 
     } 
    
@@ -57,9 +59,18 @@ public class Semantics {
 
 	State M (Loop l, State state) { 
         if (M(l.test, state).boolValue())
-            return /*M(l,  이거 왜 이러는거야*/M (l.body, state)/*)*/; 
+            return M (l.body, state); 
         else return state; 
     } 
+	
+	State M (Print p, State state) {
+		M(p.source, state);
+        return state;
+    }
+	
+	State M (Input i, State state) {
+        return state.onion(i.id, M(i.source, state));
+    }
 
     Value applyBinary (Operator op, Value v1, Value v2) { 
         if(v1 == null || v2 == null) {
@@ -284,7 +295,7 @@ public class Semantics {
     public static void main(String args[]) { 
         Parser parser  = new Parser(new Lexer(args[0])); 
         Program prog = parser.program(); 
-//        prog.display(); 
+//        prog.display();
         System.out.println("\nBegin type checking..."); 
 //        System.out.println("Type map:"); 
 //        TypeMap map = StaticTypeCheck.typing(prog.decpart); 

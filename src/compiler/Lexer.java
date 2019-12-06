@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Lexer {
 
 	// private boolean isEof = false;
-	private char ch = ' ';
+	private char ch = '\n';
 	private BufferedReader input;
 	private String line = "";
 	private int lineno = 1;
@@ -24,6 +24,7 @@ public class Lexer {
 	public Lexer(String fileName) { // source filename
 		try {
 			input = new BufferedReader(new FileReader(fileName));
+			next();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found: " + fileName);
 			System.exit(1);
@@ -63,6 +64,7 @@ public class Lexer {
 	public Token next() { // Return next token
 		do {
 			space = 0;
+			strtemp = "";
 			while(ch == ' ' || ch == '\t') {
 				if(ch == ' ') space++;
 				else space+=4;
