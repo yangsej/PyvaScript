@@ -177,8 +177,11 @@ public class Generater {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        Parser parser  = new Parser(new Lexer(args[0])); 
+        Parser parser  = new Parser(new Lexer(args[0]));
+        Parser parser2  = new Parser(new Lexer(args[0]));
+        
         Program prog = parser.program(); 
+        Program real_prog = parser2.program();
         
         Semantics semantics = new Semantics();
         State state = semantics.M(prog);
@@ -186,7 +189,7 @@ public class Generater {
         Generater generater;
 		try {
 			generater = new Generater(args[0].substring(0, args[0].lastIndexOf(".")));
-	        generater.G(prog);
+	        generater.G(real_prog);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
