@@ -4,10 +4,11 @@ i=0
 //i=1.1
 j = even + i + 3
 dk = "asdfasdf"
+test1 = "56" + 8
 //a=1.1
 
-arr[2][1]=2
-asdf[3]='5'
+//arr[2][1]=2
+//asdf[3]='5'
 
 input(k, "statement!!!")
 print(k)

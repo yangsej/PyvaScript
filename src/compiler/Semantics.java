@@ -86,6 +86,14 @@ public class Semantics {
         		return new IntValue(v1.charValue() + v2.intValue());
         	}else if(v1.type( )==Type.INT&&v2.type( ) == Type.CHAR) {
         		return new IntValue(v1.intValue() + v2.charValue());
+        	}else if(v1.type( )==Type.INT&&v2.type( ) == Type.STR) {
+        		return new StrValue(v1.intValue() + v2.strValue());
+        	}else if(v1.type( ) == Type.STR&&v2.type( )==Type.INT) {
+        		return new StrValue(v1.strValue() + v2.intValue());
+        	}else if(v1.type( )==Type.FLOAT&&v2.type( ) == Type.STR) {
+        		return new StrValue(v1.floatValue() + v2.strValue());
+        	}else if(v1.type( ) == Type.STR&&v2.type( )==Type.FLOAT) {
+        		return new StrValue(v1.strValue() + v2.floatValue());
         	}
         	System.err.println("mismatched types");
             System.exit(1);
