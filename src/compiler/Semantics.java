@@ -44,35 +44,23 @@ public class Semantics {
    
     State M (Assignment a, State state) { 
     	if(a.target instanceof ListItem) {
-    		ListItem li = (ListItem) a.target;
-
-    		// 1차원
-    		List l = (List) state.get(li);
-    		ArrayList<Expression> members = l.list();
-
-    		
-    		// 2차원
-    		Expression temp = members.get(M(li.index.get(0), state).intValue());
-    		if(temp instanceof List) {
-        		l = (List)temp;
-        		members = l.list();	
-        		members.set(M(li.index.get(1), state).intValue(), M(a.source, state));
-    		} else {
-        		members.set(M(li.index.get(0), state).intValue(), M(a.source, state));
+        	ListItem li = (ListItem) a.target;
+    		Expression item = state.get(a.target);
+    		List l = null;
+    		int index = 0;
+    		for(Expression i : li.index) {
+    			index = M(i, state).intValue();
+    			
+    			try {
+            		l = (List)item;
+        			item = l.members.get(index);
+    			} catch(ClassCastException error) {
+    				System.err.println("object is not subscriptable");
+                    System.exit(1);
+    			}
     		}
-//    		temp = members.get(M(li.index.get(1), state).intValue());
-    		
-
-    		
-    	
-    		
-    		
-//    		Expression value;
-//    		for(Expression i : li.index) {
-//    			value = members.get(M(i, state).intValue());
-//    		}
+    		l.members.set(index, M(a.source, state));
     		return state;
-//    		return state.onion(a.target, l/*new List(members)*/); 
     	}
         return state.onion(a.target, M (a.source, state)); 
     } 
@@ -324,7 +312,7 @@ public class Semantics {
     	System.out.println(e);
         if (e instanceof Value) {
 //            if (e instanceof List) {
-//            	
+//            	List l = (List)e;
 //            }
             return (Value)e; 
         }
@@ -333,18 +321,24 @@ public class Semantics {
             	System.err.println("reference to undeclared variable");
                 System.exit(1);
             }
-          	
+
+    		Expression item = state.get(e);
           	if(e instanceof ListItem) {
             	ListItem li = (ListItem) e;
-          		ArrayList<Expression> members = state.get(li).list(), pointer = members;
-          		
-//        		for(Expression i : li.index) {
-//        			pointer = M(members.get(M(i, state).intValue()), state).list();
-//        		}
-          		return (Value) members.get(M(li.index.get(0), state).intValue());
+        		for(Expression i : li.index) {
+        			int index = M(i, state).intValue();
+        			
+        			try {
+                		List l = (List)item;
+            			item = l.members.get(index);
+        			} catch(ClassCastException error) {
+        				System.err.println("object is not subscriptable");
+                        System.exit(1);
+        			}
+        		}
           	}
           	
-        	return (Value)(state.get(e));
+        	return (Value)item;
         }
         
         if (e instanceof Binary) { 
