@@ -3,6 +3,7 @@ package compiler;
 public class Parser {
 	Token token; // current token from the input stream
 	Lexer lexer;
+	static String ListIndex = "";
 	
 	private Statement s_pre = null;
 
@@ -74,6 +75,18 @@ public class Parser {
 		if (token.type() == TokenType.Identifier) {
 			target = new Variable(token.value());
 			token = lexer.next();
+			if(token.type() == TokenType.LeftBracket) {
+				ListIndex="";
+				ListIndex+="[";
+				token = lexer.next();
+				while(token.type() != TokenType.Assign) {
+					ListIndex += token.value();
+					token = lexer.next();
+				}
+					//ListIndex += lexer.next().value();
+				System.out.println(ListIndex);
+			}
+			
 		}
 		match(TokenType.Assign);
 		Expression source = expression();

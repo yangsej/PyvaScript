@@ -116,7 +116,11 @@ class Assignment extends Statement {
 	public String toString() {
 		String str = Program.tab() + "=";
 		Program.tabs++;
-		str += "\n" + Program.tab() + target + "\n" + Program.tab() + source;
+		if(Parser.ListIndex!="") {
+			str += "\n" + Program.tab() + target + Parser.ListIndex + "\n" + Program.tab() + source;
+		}else {
+			str += "\n" + Program.tab() + target + "\n" + Program.tab() + source;
+		}
 		Program.tabs--;
 		return str;
 	}
