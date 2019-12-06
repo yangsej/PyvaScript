@@ -111,11 +111,13 @@ public class Generater {
 	}
 
 	void G(Expression e) {
+		if(e.hasParen) result += "(";
 		if(e instanceof Variable) G((Variable)e);
 		else if(e instanceof Value) G((Value)e);
 		else if(e instanceof Binary) G((Binary)e);
 		else if(e instanceof Unary) G((Unary)e);
-        else throw new IllegalArgumentException("should never reach here"); 
+        else throw new IllegalArgumentException("should never reach here");
+		if(e.hasParen) result += ")";
 	}
 	
 	void G(Variable v) {
@@ -163,8 +165,14 @@ public class Generater {
 	void G(StrValue v) {
 		result += "\"" + v + "\"";
 	}
-	void G(List v) {
-		result += v;
+	void G(List l) {
+		result += "[";
+		for(Expression e : l.members) {
+			G(e);
+			if(e == l.members.get(l.members.size()-1)) break;
+			result += ", ";
+		}
+		result += "]";
 	}
 	
 	public static void main(String[] args) {

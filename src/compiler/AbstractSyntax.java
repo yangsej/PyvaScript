@@ -208,6 +208,7 @@ class Input extends Statement {
 
 abstract class Expression {
 	// Expression = Variable | Value | Binary | Unary
+	public boolean hasParen = false;
 
 }
 

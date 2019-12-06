@@ -270,7 +270,9 @@ public class Parser {
 			e = literal();
 		} else if (token.type() == TokenType.LeftParen) {
 			token = lexer.next();
+//			Boolean hasParen = true;
 			e = expression();
+			e.hasParen = true;
 			match(TokenType.RightParen);
 		} else if (token.type() == TokenType.LeftBracket) {
 			token = lexer.next();
