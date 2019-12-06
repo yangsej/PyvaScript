@@ -53,7 +53,13 @@ public class Generater {
 	}
 	
 	void G(Assignment a) throws IOException {
-		result += "var ";
+		String temp = "";
+		temp+=a.target;
+		//System.out.println(temp+" check!");
+		if(!temp.contains("[")) { 
+			
+			result += "var ";
+		}
 		G(a.target);
 		result += " = ";
 		G(a.source);
@@ -114,6 +120,7 @@ public class Generater {
 	
 	void G(Variable v) {
 		result += v;
+		//System.out.println(v);
 	}
 	
 	void G(Value v) {
@@ -122,6 +129,7 @@ public class Generater {
 		else if(v instanceof CharValue) G((CharValue)v);
 		else if(v instanceof FloatValue) G((FloatValue)v);
 		else if(v instanceof StrValue) G((StrValue)v);
+		else if(v instanceof List) G((List)v);
         else throw new IllegalArgumentException("should never reach here"); 
 	}
 	
@@ -154,6 +162,9 @@ public class Generater {
 	
 	void G(StrValue v) {
 		result += "\"" + v + "\"";
+	}
+	void G(List v) {
+		result += v;
 	}
 	
 	public static void main(String[] args) {

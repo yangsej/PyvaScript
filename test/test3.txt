@@ -6,8 +6,9 @@ j = even + i + 3
 dk = "asdfasdf"
 test1 = "56" + 8
 //a=1.1
-
-arr[2][1]=2
+arr=[1,2,[3,4]]
+arr[2][1]=5
+asdf=[12,1.1,"ass", 20]
 asdf[3]='5'
 
 input(k, "statement!!!")
