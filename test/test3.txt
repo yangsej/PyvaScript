@@ -1,6 +1,7 @@
 
 even=1 + 2 + 3
 i=0
+//i=1.1
 j = even + i + 3
 dk = "asdfasdf"
 //a=1.1
@@ -19,5 +20,7 @@ while even < 10 :
 		even=-1
 		while j > 0:
 			j = 3
-c='A'
+c='A'+3
+
+//as = null
  // main

@@ -74,10 +74,19 @@ public class Semantics {
 
     Value applyBinary (Operator op, Value v1, Value v2) { 
         if(v1 == null || v2 == null) {
-        	System.err.println("reference to unedfined value");
+        	System.err.println("reference to undeclared value");
             System.exit(1);
         }
         if( v1.type( ) != v2.type( )){
+        	if(v1.type( ) == Type.INT&&v2.type( )==Type.FLOAT) {
+        		return new FloatValue(v1.intValue() + v2.floatValue());
+        	}else if(v1.type( )==Type.FLOAT&&v2.type( ) == Type.INT) {
+        		return new FloatValue(v1.floatValue() + v2.intValue());
+        	}else if(v1.type( ) == Type.CHAR&&v2.type( )==Type.INT) {
+        		return new IntValue(v1.charValue() + v2.intValue());
+        	}else if(v1.type( )==Type.INT&&v2.type( ) == Type.CHAR) {
+        		return new IntValue(v1.intValue() + v2.charValue());
+        	}
         	System.err.println("mismatched types");
             System.exit(1);
         }
@@ -275,7 +284,7 @@ public class Semantics {
             return (Value)e; 
         if (e instanceof Variable) {
           	if(!state.containsKey(e)){
-            	System.err.println("reference to undefined variable");
+            	System.err.println("reference to undeclared variable");
                 System.exit(1);
             }
         	return (Value)(state.get(e));
