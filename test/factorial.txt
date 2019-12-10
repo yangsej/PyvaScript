@@ -1,0 +1,11 @@
+input(n, "please input number")
+a=int(n)
+i=1
+fact=0
+while i<= a :
+	if i == 1 : 
+		fact=1
+	else :
+		fact=fact*i
+	i=i+1
+print(fact) 
