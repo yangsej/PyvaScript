@@ -36,7 +36,6 @@ public class Generater {
 	}
 
 	void G(Statement s) throws IOException {
-		System.out.println(s);
 		if (s instanceof Skip)
 			G((Skip) s);
 		else if (s instanceof Assignment)
@@ -245,15 +244,17 @@ public class Generater {
 		Program real_prog = parser2.program();
 
 		TypeChecker typechecker = new TypeChecker();
-		SymbolTable state = typechecker.M(prog);
+		SymbolTable table = typechecker.M(prog);
 
 		Generater generater;
 		try {
 			generater = new Generater(args[0].substring(0, args[0].lastIndexOf(".")));
 			generater.G(real_prog);
+			System.out.println("Generation Done.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Generation Failed.");
 		}
 	}
 

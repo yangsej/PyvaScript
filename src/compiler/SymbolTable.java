@@ -15,7 +15,6 @@ public class SymbolTable extends HashMap<Variable, Value> {
 
 	public SymbolTable onion(Variable key, Value val) {
 		put(key, val);
-		System.out.println("Onion! " + key + " " + val);
 		return this;
 	}
 

@@ -331,7 +331,6 @@ public class TypeChecker {
 	}
 
 	Value M(Expression e, SymbolTable state) {
-		System.out.println(e);
 		if (e instanceof Value) {
 //            if (e instanceof List) {
 //            	List l = (List)e;
@@ -384,16 +383,8 @@ public class TypeChecker {
 		Program prog = parser.program();
 //        prog.display();
 		System.out.println("\nBegin type checking...");
-//        System.out.println("Type map:"); 
-//        TypeMap map = StaticTypeCheck.typing(prog.decpart); 
-//        map.display(); 
-//        StaticTypeCheck.V(prog); 
-//        Program out = TypeTransformer.T(prog, map); 
-//        System.out.println("Output AST"); 
-//        out.display(); 
 		TypeChecker typechecker = new TypeChecker();
 		SymbolTable table = typechecker.M(prog);
-		System.out.println("Final State");
-		state.display();
+		table.display();
 	}
 }

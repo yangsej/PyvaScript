@@ -96,8 +96,6 @@ public class Parser {
 		// Block --> Statement { Statement }
 		Block b = new Block();
 
-		if (token.type() == TokenType.Colon)
-			token = lexer.next();
 		while (token.type() == TokenType.Enter)
 			token = lexer.next();
 		b.space = lexer.getSpaceNum();
@@ -139,11 +137,12 @@ public class Parser {
 		int if_space = lexer.getSpaceNum();
 		match(TokenType.If);
 		Expression test = expression();
-
+		match(TokenType.Colon);
 		Statement thenbranch = statements(if_space), elsebranch = null;
 		Conditional cond = null;
 		if (token.type() == TokenType.Else && lexer.getSpaceNum() == if_space) {
 			token = lexer.next();
+			match(TokenType.Colon);
 			elsebranch = statements(if_space);
 			cond = new Conditional(test, thenbranch, elsebranch);
 		} else
@@ -157,6 +156,7 @@ public class Parser {
 		int space = lexer.getSpaceNum();
 		match(TokenType.While);
 		Expression test = expression();
+		match(TokenType.Colon);
 		return new Loop(test, statements(space)); // student exercise
 	}
 
