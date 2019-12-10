@@ -295,10 +295,19 @@ public class Semantics {
         }
         else if (op.val.equals(Operator.INT)) {
         	if (v.type() == Type.FLOAT)
-        		return new IntValue(v.intValue( ));  
+        		return new IntValue(v.intValue( )); 
+        	else if(v.type() == Type.STR)
+        		return new IntValue(v.intValue( ));
         }else if (op.val.equals(Operator.FLOAT)) {
         	if (v.type() == Type.INT)
         		return new FloatValue(v.floatValue( ));
+        	else if(v.type() == Type.STR)
+        		return new FloatValue(v.floatValue( ));
+        }else if (op.val.equals(Operator.STR)) {
+        	if (v.type() == Type.INT)
+        		return new StrValue(v.strValue( ));
+        	else if(v.type() == Type.FLOAT)
+        		return new StrValue(v.strValue( ));
         }
         
 //        else if (op.val.equals(Operator.INT_NEG)) 

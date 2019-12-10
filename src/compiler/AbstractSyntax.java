@@ -564,6 +564,7 @@ class Operator {
 	final static String INT = "int";
 	final static String FLOAT = "float";
 	final static String CHAR = "char";
+	final static String STR = "str";
 	// Typed Operators
 	// RelationalOp = < | <= | == | != | >= | >
 	final static String INT_LT = "INT<";

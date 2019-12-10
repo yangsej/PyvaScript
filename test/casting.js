@@ -1,2 +1,2 @@
-var a = 1.1;
+var a = "aa";
 alert(parseInt(a));

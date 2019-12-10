@@ -165,14 +165,16 @@ public class Generater {
 	}
 	
 	void G(Unary u) {
-		if(u.op.val.equals(Operator.INT)||u.op.val.equals(Operator.FLOAT)){
+		if(u.op.val.equals(Operator.INT)||u.op.val.equals(Operator.FLOAT)
+				||u.op.val.equals(Operator.STR)){
 			String temp = "";
 			temp += u.op;
-//			System.out.println("Unary : " + temp);
 			if(temp.equals(Operator.INT)){
 				temp = temp.replace(Operator.INT, "parseInt");
 			} else if(temp.equals(Operator.FLOAT)){
 				temp = temp.replace(Operator.FLOAT, "parseFloat");
+			} else if(temp.equals(Operator.STR)){
+				temp = temp.replace(Operator.STR, "String");
 			}
 			result += temp + "(";
 			G(u.term);

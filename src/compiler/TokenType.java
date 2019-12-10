@@ -4,7 +4,7 @@ public enum TokenType {
 	// Keywords
     Else, False,
 	If, True, While,
-    Print, Input, Int, Float,
+    Print, Input, Int, Float, Str, Char,
     
     // Others
     Eof, LeftBracket, RightBracket,

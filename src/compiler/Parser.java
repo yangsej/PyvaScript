@@ -284,7 +284,8 @@ public class Parser {
 			}
 			token = lexer.next();
 			return l;
-		}else if (token.type()== TokenType.Int) {
+		}else if (token.type()== TokenType.Int||token.type()== TokenType.Float
+				||token.type()== TokenType.Str||token.type()== TokenType.Char) {
 			Operator op = new Operator(match(token.type())); 
 			match(TokenType.LeftParen); 
 			Expression term = expression(); 
