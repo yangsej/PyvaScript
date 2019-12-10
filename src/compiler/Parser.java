@@ -284,9 +284,13 @@ public class Parser {
 			}
 			token = lexer.next();
 			return l;
-//		} else if (token.type() == TokenType.Input){
-//			return inputExpression();
-		} else 
+		}else if (token.type()== TokenType.Int) {
+			Operator op = new Operator(match(token.type())); 
+			match(TokenType.LeftParen); 
+			Expression term = expression(); 
+			match(TokenType.RightParen); 
+			e = new Unary(op, term); 
+		}else 
 			error("Identifier | Literal | ( | Type");
 		return e;
 	}

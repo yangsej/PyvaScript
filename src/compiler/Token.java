@@ -7,11 +7,10 @@ public class Token {
 	private static Token[] token = new Token[KEYWORDS];
 
 	public static final Token eofTok = new Token(TokenType.Eof, "<<EOF>>");
-//	public static final Token boolTok = new Token(TokenType.Bool, "bool");
 //	public static final Token charTok = new Token(TokenType.Char, "char");
 	public static final Token elseTok = new Token(TokenType.Else, "else");
 	public static final Token falseTok = new Token(TokenType.False, "false");
-//	public static final Token floatTok = new Token(TokenType.Float, "float");
+	public static final Token floatTok = new Token(TokenType.Float, "float");
 	public static final Token ifTok = new Token(TokenType.If, "if");
 	public static final Token intTok = new Token(TokenType.Int, "int");
 	public static final Token trueTok = new Token(TokenType.True, "true");

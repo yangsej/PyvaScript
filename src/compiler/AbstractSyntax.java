@@ -2,6 +2,7 @@ package compiler;
 
 import java.util.*;
 
+
 class Program {
 	// Program = Block body
 	Block body;
@@ -106,6 +107,8 @@ class Block extends Statement{
 
 class Assignment extends Statement {
 	// Assignment = Variable target; Expression source
+//	List DeclCheck = new ArrayList<String>();
+	
 	Variable target;
 	Expression source;
 

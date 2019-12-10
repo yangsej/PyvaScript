@@ -1,6 +1,8 @@
 package compiler;
 
 import java.io.File;
+import java.util.ArrayList;
+//import java.util.List;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
@@ -9,14 +11,12 @@ public class Generater {
 	File jsFile = null, htmlFile = null;
 	FileWriter writer = null;
 	String result = "";
-	
+	ArrayList<String> DeclCheck = new ArrayList<String>();
 	private static int tabs = 0;
-	
 	Generater(String Fname) throws IOException {
 		jsFile = new File(Fname + ".js");
 		htmlFile = new File(Fname + ".html");
 	}
-	
 	void G(Program p) throws IOException {
 		for(Statement s : p.body.members) {
 			G(s);
@@ -54,14 +54,37 @@ public class Generater {
 	
 	void G(Assignment a) throws IOException {
 		String temp = "";
+		String temp2 = "";
+		int spliIdx;
+		int flag=0;
 		temp+=a.target;
-		//System.out.println(temp+" check!");
-		if(!temp.contains("[")) { 
-			
-			result += "var ";
+		
+		if(temp.contains("[")){
+			spliIdx = temp.indexOf("[");
+			temp2 = temp.substring(0, spliIdx);
+			flag=1;
 		}
+		if(flag==1){
+			if(!DeclCheck.contains(temp2)){
+				DeclCheck.add(temp2);
+				result += "var ";
+			}
+		}else{
+			if(!DeclCheck.contains(temp)){
+				DeclCheck.add(temp);
+				result += "var ";
+			}
+			
+		}
+		
+		//System.out.println(temp+" check!");
+		
+//		if(!temp.contains("[")) { 
+//			result += "var ";
+//		}
 		G(a.target);
 		result += " = ";
+			
 		G(a.source);
 		result += ";\n";
 	}
@@ -142,8 +165,23 @@ public class Generater {
 	}
 	
 	void G(Unary u) {
-		result += u.op;
-		G(u.term);
+		if(u.op.val.equals(Operator.INT)||u.op.val.equals(Operator.FLOAT)){
+			String temp = "";
+			temp += u.op;
+//			System.out.println("Unary : " + temp);
+			if(temp.equals(Operator.INT)){
+				temp = temp.replace(Operator.INT, "parseInt");
+			} else if(temp.equals(Operator.FLOAT)){
+				temp = temp.replace(Operator.FLOAT, "parseFloat");
+			}
+			result += temp + "(";
+			G(u.term);
+			result += ")";
+		}
+		else {
+			result += u.op;
+			G(u.term);
+		}
 	}
 	
 	void G(IntValue v) {
