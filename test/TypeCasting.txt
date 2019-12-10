@@ -1,0 +1,13 @@
+a = 2
+b = -float(a)
+
+c = "1"
+d = int(c)
+
+e = 15
+f = str(e) // explicit type casting 
+   
+g = 1.1 
+g = g * a  
+print("g : " + g) // implicit type casting 
+  

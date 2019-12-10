@@ -1,0 +1,11 @@
+var a = 1;
+var b = -parseFloat(a);
+var c = "1";
+var d = parseInt(c);
+var e = 15;
+var f = String(e);
+var n = 3;
+var i = 0;
+var g = 1.0;
+g = g * i;
+alert("g : " + g);
