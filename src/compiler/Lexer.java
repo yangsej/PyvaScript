@@ -187,7 +187,7 @@ public class Lexer {
 	}
 
 	private boolean isDigit(char c) {
-		return (c >= '0' && c < '9'); // student exercise
+		return (c >= '0' && c <= '9'); // student exercise
 	}
 
 	private void check(char c) {

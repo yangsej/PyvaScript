@@ -127,7 +127,7 @@ public class Generater {
 	}
 
 	void G(Print p) throws IOException {
-		result += "alert(";
+		result += "console.log(";
 		G(p.source);
 		result += ");\n";
 	}
