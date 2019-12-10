@@ -32,29 +32,28 @@ public class Parser {
 		System.exit(1);
 	}
 
-	private void error() {
+	private void error() { // space의 개수가 적절하지 않을 경우 나오는 에러
 		System.err.println("Syntax error: expected an indented block");
 		System.exit(1);
 	}
 
 	public Program program() {
 		// Program --> Statements
-
+		
 		return new Program(statements(-1));
 	}
 
 	private Statement statement() {
-		// Statement --> Skip | Block | Assignment | IfStatement |
-		// WhileStatement | PrintStatement | InputStatement
+		// Statement --> Skip | Block | Assignment | IfStatement
+		// 				| WhileStatement | PrintStatement | InputStatement
 
 		Statement s = new Skip();
 		int space = lexer.getSpaceNum();
 		if (token.type() == TokenType.Identifier)
 			s = assignment();
-//		else if(token.type() == TokenType.Colon)
-//			s = statements(space);
 		else if (token.type() == TokenType.If)
 			s = ifStatement();
+		// if절 없이 else절로 바로 온 경우
 		else if (token.type() == TokenType.Else)
 			error();
 		else if (token.type() == TokenType.While)
@@ -73,11 +72,13 @@ public class Parser {
 
 	private Assignment assignment() {
 		// Assignment --> Identifier = Expression
+		
 		Variable target = null;
 		if (token.type() == TokenType.Identifier) {
 			target = new Variable(token.value());
 			token = lexer.next();
 
+			// 배열 아이템 확인
 			ArrayList<Expression> index = new ArrayList<Expression>();
 			while (token.type() == TokenType.LeftBracket) {
 				match(TokenType.LeftBracket);
@@ -92,8 +93,10 @@ public class Parser {
 		return new Assignment(target, source); // student exercise
 	}
 
+	// 같은 블록인지 확인을 위해 인자로 space를 받음
 	private Block statements(int space) {
 		// Block --> Statement { Statement }
+		
 		Block b = new Block();
 
 		while (token.type() == TokenType.Enter)
@@ -188,7 +191,6 @@ public class Parser {
 			Expression conjunction2 = conjunction();
 			e = new Binary(op, e, conjunction2);
 		}
-//    	token = lexer.next();
 		return e; // student exercise
 	}
 
@@ -227,6 +229,7 @@ public class Parser {
 
 	private Expression addition() {
 		// Addition --> Term { AddOp Term }
+		
 		Expression e = term();
 		while (isAddOp()) {
 			Operator op = new Operator(match(token.type()));
@@ -238,6 +241,7 @@ public class Parser {
 
 	private Expression term() {
 		// Term --> Factor { MultiplyOp Factor }
+		
 		Expression e = factor();
 		while (isMultiplyOp()) {
 			Operator op = new Operator(match(token.type()));
@@ -249,6 +253,7 @@ public class Parser {
 
 	private Expression factor() {
 		// Factor --> [ UnaryOp ] Primary
+		
 		if (isUnaryOp()) {
 			Operator op = new Operator(match(token.type()));
 			Expression term = primary();
@@ -259,10 +264,12 @@ public class Parser {
 
 	private Expression primary() {
 		// Primary --> Identifier{'['Expression']'} | Literal | ( Expression ) | Input
+		
 		Expression e = null;
 		if (token.type() == TokenType.Identifier) {
 			Variable target = new Variable(token.value());
 			token = lexer.next();
+			// 배열 처리
 			ArrayList<Expression> index = new ArrayList<Expression>();
 			while (token.type() == TokenType.LeftBracket) {
 				match(TokenType.LeftBracket);
@@ -301,16 +308,7 @@ public class Parser {
 			error("Identifier | Literal | ( | Type");
 		return e;
 	}
-
-//	private Expression inputExpression() {
-//		// InputStatement --> input '(' Expression ')'
-//		match(TokenType.Input);
-//		match(TokenType.LeftParen);
-//		Expression source = expression();
-//		match(TokenType.RightParen);
-//		return new InputExpression(source);
-//	}
-
+	
 	private Value literal() {
 		Value v = null;
 		if (token.type() == TokenType.IntLiteral)

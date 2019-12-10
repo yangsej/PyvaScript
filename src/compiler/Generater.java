@@ -2,7 +2,6 @@ package compiler;
 
 import java.io.File;
 import java.util.ArrayList;
-//import java.util.List;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
@@ -83,11 +82,6 @@ public class Generater {
 
 		}
 
-		// System.out.println(temp+" check!");
-
-//		if(!temp.contains("[")) { 
-//			result += "var ";
-//		}
 		G(a.target);
 		result += " = ";
 
@@ -185,9 +179,11 @@ public class Generater {
 	}
 
 	void G(Unary u) {
+		// 명시적 형 변환
 		if (u.op.val.equals(Operator.INT) || u.op.val.equals(Operator.FLOAT) || u.op.val.equals(Operator.STR)) {
 			String temp = "";
 			temp += u.op;
+			
 			if (temp.equals(Operator.INT)) {
 				temp = temp.replace(Operator.INT, "parseInt");
 			} else if (temp.equals(Operator.FLOAT)) {
@@ -236,7 +232,6 @@ public class Generater {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Parser parser = new Parser(new Lexer(args[0]));
 		Parser parser2 = new Parser(new Lexer(args[0]));
 
@@ -252,7 +247,6 @@ public class Generater {
 			generater.G(real_prog);
 			System.out.println("Generation Done.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Generation Failed.");
 		}

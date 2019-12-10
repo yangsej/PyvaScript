@@ -45,38 +45,10 @@ class Type {
 	}
 }
 
-//class Block {
-//	// Block = Statement*
-//	// (a Vector of members)
-//	public ArrayList<Statement> members = new ArrayList<Statement>();
-//
-//	public String toString() {
-//		String str = Program.tab() + ":";
-//		Program.tabs++;
-//		for (Statement sta : members) {
-//			str += "\n" + sta;
-//		}
-//		Program.tabs--;
-//		return str;
-//	}
-//}
-
-//class Skip extends Block {
-//	public String toString() {
-//		return Program.tab() + "Block_Skip";
-//	}
-//}
-
 abstract class Statement {
 	public int space = -1;
-	// Statement = Skip | Assignment | Conditional | Loop | Print
+	// Statement = Skip | Block | Assignment | Conditional | Loop | Print | Input
 }
-
-//class Statement_Skip extends Statement {
-//	public String toString() {
-//		return Program.tab() + "Statement_Skip";
-//	}
-//}
 
 class Skip extends Statement {
 	public String toString() {
@@ -102,7 +74,6 @@ class Block extends Statement {
 
 class Assignment extends Statement {
 	// Assignment = Variable target; Expression source
-//	List DeclCheck = new ArrayList<String>();
 
 	Variable target;
 	Expression source;
@@ -122,7 +93,8 @@ class Assignment extends Statement {
 }
 
 class Conditional extends Statement {
-//Conditional = Expression test; Block thenbranch, elsebranch
+	//Conditional = Expression test; Block thenbranch, elsebranch
+	
 	Expression test;
 	Statement thenbranch, elsebranch;
 	// elsebranch == null means "if... then"
@@ -149,7 +121,8 @@ class Conditional extends Statement {
 }
 
 class Loop extends Statement {
-//Loop = Expression test; Statement body
+	//Loop = Expression test; Statement body
+	
 	Expression test;
 	Statement body;
 
@@ -169,6 +142,7 @@ class Loop extends Statement {
 
 class Print extends Statement {
 	// Print = Expression source
+	
 	Expression source;
 
 	Print(Expression string) {
@@ -185,7 +159,7 @@ class Print extends Statement {
 }
 
 class Input extends Statement {
-	// Print = Expression source
+	// Input = Variable id; Expression source
 	Variable id;
 	Expression source;
 
@@ -205,7 +179,7 @@ class Input extends Statement {
 }
 
 abstract class Expression {
-	// Expression = Variable | Value | Binary | Unary
+	// Expression = Variable | ListItem | Value | Binary | Unary
 	public boolean hasParen = false;
 
 }
@@ -255,32 +229,8 @@ class ListItem extends Variable {
 	}
 }
 
-//class InputVariable extends Variable {
-//	// Variable = String id
-//	private String id;
-//	Expression source;
-//
-//	InputVariable(Expression string) {
-//		id = "input";
-//		source = string;
-//	}
-//
-//	public boolean equals(Object obj) {
-//		String s = ((Variable) obj).id;
-//		return id.equals(s); // case-sensitive identifiers
-//	}
-//
-//	public String toString() {
-//		String str = id;
-//		Program.tabs++;
-//		str += "\n" + Program.tab() + source;
-//		Program.tabs--;
-//		return str;
-//	}
-//}
-
 abstract class Value extends Expression {
-	// Value = IntValue | BoolValue | CharValue | FloatValue
+	// Value = IntValue | BoolValue | CharValue | FloatValue | List
 	protected Type type;
 	protected boolean undef = true;
 

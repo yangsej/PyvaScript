@@ -6,8 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Lexer {
-
-	// private boolean isEof = false;
+	
 	private char ch = '\n';
 	private BufferedReader input;
 	private String line = "";
@@ -19,7 +18,7 @@ public class Lexer {
 	private final char eofCh = '\004';
 	private String strtemp = "";
 
-	private int space = 0;
+	private int space = 0; // 앞에 있는 space의 개수를 저장
 
 	public Lexer(String fileName) { // source filename
 		try {
@@ -64,6 +63,7 @@ public class Lexer {
 
 	public Token next() { // Return next token
 		do {
+			// 앞에 있는 space의 수를 계산
 			space = 0;
 			strtemp = "";
 			while (ch == ' ' || ch == '\t') {
@@ -88,7 +88,6 @@ public class Lexer {
 				case eolnCh:
 					ch = nextChar();
 					return Token.enterTok;
-//					break;
 
 				case ':':
 					ch = nextChar();
@@ -148,16 +147,13 @@ public class Lexer {
 					ch = nextChar();
 					return Token.rightBracketTok;
 
-				/*
-				 * case '{': ch = nextChar(); return Token.leftBraceTok; case '}': ch =
-				 * nextChar(); return Token.rightBraceTok;
-				 */
 				case ';':
 					ch = nextChar();
 					return Token.semicolonTok;
 				case ',':
 					ch = nextChar();
 					return Token.commaTok;
+					
 				// - * ( ) { } ; , student exercise finished
 				case '&':
 					check('&');

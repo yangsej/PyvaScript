@@ -1,30 +1,10 @@
 package compiler;
 
-import java.util.ArrayList;
-
-// Following is the semantics class: 
-// The meaning M of a Statement is a State 
-// The meaning M of a Expression is a Value 
-
 public class TypeChecker {
 
 	SymbolTable M(Program p) {
 		return M(p.body, new SymbolTable());
 	}
-
-//    State initialState (Block b) {
-//        State state = new State(); 
-////        Value intUndef = new IntValue();
-//        for (Statement s: b.members){
-//        	if(s.getClass() == Assignment.class){
-//        		Assignment a = (Assignment)s;
-//        		System.out.println(a);
-//        		state.put(a.target, a.source);
-//        	}
-//        }
-//         
-//        return state; 
-//    }
 
 	SymbolTable M(Statement s, SymbolTable state) {
 		if (s instanceof Skip)
@@ -49,6 +29,7 @@ public class TypeChecker {
 	}
 
 	SymbolTable M(Assignment a, SymbolTable state) {
+		// 배열의 Item에 대입하려 할 때
 		if (a.target instanceof ListItem) {
 			ListItem li = (ListItem) a.target;
 			Expression item = state.get(a.target);
@@ -57,6 +38,7 @@ public class TypeChecker {
 			for (Expression i : li.index) {
 				index = M(i, state).intValue();
 
+				// 해당되는 값을 못찾는다 == 인덱스 범위가 잘못됬다
 				try {
 					l = (List) item;
 					item = l.members.get(index);
@@ -105,6 +87,7 @@ public class TypeChecker {
 			System.err.println("reference to undeclared value");
 			System.exit(1);
 		}
+		// 묵시적 형 변환
 		if (v1.type() != v2.type()) {
 			if (v1.type() == Type.INT && v2.type() == Type.FLOAT) {
 				return new FloatValue(v1.intValue() + v2.floatValue());
@@ -216,73 +199,6 @@ public class TypeChecker {
 			}
 		}
 
-//        if (op.val.equals(Operator.INT_PLUS))  
-//            return new IntValue(v1.intValue( ) + v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_MINUS))  
-//            return new IntValue(v1.intValue( ) - v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_TIMES))  
-//            return new IntValue(v1.intValue( ) * v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_DIV))  
-//            return new IntValue(v1.intValue( ) / v2.intValue( ));         
-// 
-//        if (op.val.equals(Operator.FLOAT_PLUS))  
-//            return new FloatValue(v1.floatValue( ) + v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_MINUS))  
-//            return new FloatValue(v1.floatValue( ) - v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_TIMES))  
-//            return new FloatValue(v1.floatValue( ) * v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_DIV))  
-//            return new FloatValue(v1.floatValue( ) / v2.floatValue( )); 
-//
-//        if (op.val.equals(Operator.INT_LT)) 
-//            return new BoolValue(v1.intValue( ) < v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_LE)) 
-//            return new BoolValue(v1.intValue( ) <= v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_EQ)) 
-//            return new BoolValue(v1.intValue( ) == v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_NE)) 
-//            return new BoolValue(v1.intValue( ) != v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_GT)) 
-//            return new BoolValue(v1.intValue( ) > v2.intValue( )); 
-//        if (op.val.equals(Operator.INT_GE)) 
-//            return new BoolValue(v1.intValue( ) >= v2.intValue( )); 
-//
-//        if (op.val.equals(Operator.FLOAT_LT)) 
-//            return new BoolValue(v1.floatValue( ) <  v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_LE)) 
-//            return new BoolValue(v1.floatValue( ) <= v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_EQ)) 
-//            return new BoolValue(v1.floatValue( ) == v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_NE)) 
-//            return new BoolValue(v1.floatValue( ) != v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_GT)) 
-//           return new BoolValue(v1.floatValue( ) >  v2.floatValue( )); 
-//        if (op.val.equals(Operator.FLOAT_GE)) 
-//            return new BoolValue(v1.floatValue( ) >= v2.floatValue( )); 
-//
-//        if (op.val.equals(Operator.CHAR_LT)) 
-//            return new BoolValue(v1.charValue( ) <  v2.charValue( )); 
-//        if (op.val.equals(Operator.CHAR_LE)) 
-//            return new BoolValue(v1.charValue( ) <= v2.charValue( )); 
-//        if (op.val.equals(Operator.CHAR_EQ)) 
-//            return new BoolValue(v1.charValue( ) == v2.charValue( )); 
-//        if (op.val.equals(Operator.CHAR_NE)) 
-//            return new BoolValue(v1.charValue( ) != v2.charValue( )); 
-//        if (op.val.equals(Operator.CHAR_GT)) 
-//            return new BoolValue(v1.charValue( ) >  v2.charValue( )); 
-//        if (op.val.equals(Operator.CHAR_GE)) 
-//            return new BoolValue(v1.charValue( ) >= v2.charValue( )); 
-//
-//        if (op.val.equals(Operator.BOOL_EQ)) 
-//            return new BoolValue(v1.boolValue( ) == v2.boolValue( )); 
-//        if (op.val.equals(Operator.BOOL_NE)) 
-//            return new BoolValue(v1.boolValue( ) != v2.boolValue( )); 
-//        if (op.val.equals(Operator.AND)) 
-//            return new BoolValue(v1.boolValue( ) && v2.boolValue( )); 
-//        if (op.val.equals(Operator.OR)) 
-//            return new BoolValue(v1.boolValue( ) || v2.boolValue( )); 
-		// student exercise
-		// add float , bool, and Char(maybe)
 		throw new IllegalArgumentException("should never reach here");
 	}
 
@@ -298,7 +214,10 @@ public class TypeChecker {
 				return new IntValue(-v.intValue());
 			if (v.type() == Type.FLOAT)
 				return new FloatValue(-v.floatValue());
-		} else if (op.val.equals(Operator.INT)) {
+		} 
+		
+		// 명시적 형변환
+		else if (op.val.equals(Operator.INT)) {
 			if (v.type() == Type.FLOAT)
 				return new IntValue(v.intValue());
 			else if (v.type() == Type.STR)
@@ -315,26 +234,11 @@ public class TypeChecker {
 				return new StrValue(v.strValue());
 		}
 
-//        else if (op.val.equals(Operator.INT_NEG)) 
-//            return new IntValue(-v.intValue( )); 
-//        else if (op.val.equals(Operator.FLOAT_NEG)) 
-//            return new FloatValue(-v.floatValue( )); 
-//        else if (op.val.equals(Operator.I2F)) 
-//            return new FloatValue((float)(v.intValue( )));  
-//        else if (op.val.equals(Operator.F2I)) 
-//            return new IntValue((int)(v.floatValue( ))); 
-//        else if (op.val.equals(Operator.C2I)) 
-//            return new IntValue((int)(v.charValue( ))); 
-//        else if (op.val.equals(Operator.I2C)) 
-//            return new CharValue((char)(v.intValue( ))); 
 		throw new IllegalArgumentException("should never reach here");
 	}
 
 	Value M(Expression e, SymbolTable state) {
 		if (e instanceof Value) {
-//            if (e instanceof List) {
-//            	List l = (List)e;
-//            }
 			return (Value) e;
 		}
 		if (e instanceof Variable) {
@@ -343,6 +247,7 @@ public class TypeChecker {
 				System.exit(1);
 			}
 
+			// Expression에서의 배열 Item 호출
 			Expression item = state.get(e);
 			if (e instanceof ListItem) {
 				ListItem li = (ListItem) e;
@@ -381,7 +286,6 @@ public class TypeChecker {
 	public static void main(String args[]) {
 		Parser parser = new Parser(new Lexer(args[0]));
 		Program prog = parser.program();
-//        prog.display();
 		System.out.println("\nBegin type checking...");
 		TypeChecker typechecker = new TypeChecker();
 		SymbolTable table = typechecker.M(prog);
