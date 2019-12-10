@@ -1,0 +1,3 @@
+input(s, "Please Input String!!")
+
+print(s) 
