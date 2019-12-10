@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Parser {
 	Token token; // current token from the input stream
 	Lexer lexer;
-	
+
 	private Statement s_pre = null;
 
 	public Parser(Lexer ts) { // Open the C++Lite source program
@@ -31,6 +31,7 @@ public class Parser {
 		System.err.println("Syntax error: expecting: " + tok + "; saw: " + token);
 		System.exit(1);
 	}
+
 	private void error() {
 		System.err.println("Syntax error: expected an indented block");
 		System.exit(1);
@@ -38,32 +39,32 @@ public class Parser {
 
 	public Program program() {
 		// Program --> Statements
-		
+
 		return new Program(statements(-1));
 	}
 
 	private Statement statement() {
-		// Statement --> Skip | Block | Assignment | IfStatement | 
+		// Statement --> Skip | Block | Assignment | IfStatement |
 		// WhileStatement | PrintStatement | InputStatement
-		
+
 		Statement s = new Skip();
 		int space = lexer.getSpaceNum();
-		if(token.type() == TokenType.Identifier)
+		if (token.type() == TokenType.Identifier)
 			s = assignment();
 //		else if(token.type() == TokenType.Colon)
 //			s = statements(space);
-		else if(token.type() == TokenType.If)
+		else if (token.type() == TokenType.If)
 			s = ifStatement();
-		else if(token.type() == TokenType.Else)
+		else if (token.type() == TokenType.Else)
 			error();
-		else if(token.type() == TokenType.While)
+		else if (token.type() == TokenType.While)
 			s = whileStatement();
-		else if(token.type() == TokenType.Print)
+		else if (token.type() == TokenType.Print)
 			s = printStatement();
-		else if(token.type() == TokenType.Input)
+		else if (token.type() == TokenType.Input)
 			s = inputStatement();
-		
-		if(token.type() == TokenType.Enter)
+
+		if (token.type() == TokenType.Enter)
 			token = lexer.next();
 
 		s.space = space;
@@ -78,49 +79,53 @@ public class Parser {
 			token = lexer.next();
 
 			ArrayList<Expression> index = new ArrayList<Expression>();
-			while(token.type() == TokenType.LeftBracket) {
+			while (token.type() == TokenType.LeftBracket) {
 				match(TokenType.LeftBracket);
 				index.add(expression());
 				match(TokenType.RightBracket);
 			}
-			if(!index.isEmpty()) target = new ListItem(target.id, index);
+			if (!index.isEmpty())
+				target = new ListItem(target.id, index);
 		}
 		match(TokenType.Assign);
 		Expression source = expression();
 		return new Assignment(target, source); // student exercise
 	}
-	
+
 	private Block statements(int space) {
 		// Block --> Statement { Statement }
 		Block b = new Block();
-		
-		if(token.type() == TokenType.Colon) token = lexer.next();
-		while(token.type() == TokenType.Enter) token = lexer.next();
+
+		if (token.type() == TokenType.Colon)
+			token = lexer.next();
+		while (token.type() == TokenType.Enter)
+			token = lexer.next();
 		b.space = lexer.getSpaceNum();
-		if(b.space <= space) error();
+		if (b.space <= space)
+			error();
 
 		Statement s_cur = statement();
 		b.members.add(s_cur);
-		
+
 		while (token.type() != TokenType.Eof) {
-			if(token.type() == TokenType.Enter) {
+			if (token.type() == TokenType.Enter) {
 				token = lexer.next();
 				continue;
 			}
-			if(lexer.getSpaceNum() != b.members.get(0).space) {
+			if (lexer.getSpaceNum() != b.members.get(0).space) {
 				break;
 			}
 			s_cur = statement();
-			
-			if(s_cur.space == b.members.get(0).space) {
+
+			if (s_cur.space == b.members.get(0).space) {
 				b.members.add(s_cur);
 			} else {
 				s_pre = s_cur;
 				break;
 			}
-			
-			if(s_pre != null) {
-				if(s_pre.space == b.members.get(0).space) {
+
+			if (s_pre != null) {
+				if (s_pre.space == b.members.get(0).space) {
 					b.members.add(s_pre);
 					s_pre = null;
 				}
@@ -134,7 +139,7 @@ public class Parser {
 		int if_space = lexer.getSpaceNum();
 		match(TokenType.If);
 		Expression test = expression();
-		
+
 		Statement thenbranch = statements(if_space), elsebranch = null;
 		Conditional cond = null;
 		if (token.type() == TokenType.Else && lexer.getSpaceNum() == if_space) {
@@ -163,7 +168,7 @@ public class Parser {
 		match(TokenType.RightParen);
 		return new Print(source);
 	}
-	
+
 	private Input inputStatement() {
 		// InputStatement --> input '(' Expression ')'
 		match(TokenType.Input);
@@ -259,12 +264,13 @@ public class Parser {
 			Variable target = new Variable(token.value());
 			token = lexer.next();
 			ArrayList<Expression> index = new ArrayList<Expression>();
-			while(token.type() == TokenType.LeftBracket) {
+			while (token.type() == TokenType.LeftBracket) {
 				match(TokenType.LeftBracket);
 				index.add(expression());
 				match(TokenType.RightBracket);
 			}
-			if(!index.isEmpty()) target = new ListItem(target.id, index);
+			if (!index.isEmpty())
+				target = new ListItem(target.id, index);
 			e = target;
 		} else if (isLiteral()) {
 			e = literal();
@@ -277,25 +283,25 @@ public class Parser {
 		} else if (token.type() == TokenType.LeftBracket) {
 			token = lexer.next();
 			List l = new List();
-			while(token.type() != TokenType.RightBracket) {
+			while (token.type() != TokenType.RightBracket) {
 				l.members.add(expression());
-				if(token.type() == TokenType.Comma)
+				if (token.type() == TokenType.Comma)
 					token = lexer.next();
 			}
 			token = lexer.next();
 			return l;
-		}else if (token.type()== TokenType.Int||token.type()== TokenType.Float
-				||token.type()== TokenType.Str||token.type()== TokenType.Char) {
-			Operator op = new Operator(match(token.type())); 
-			match(TokenType.LeftParen); 
-			Expression term = expression(); 
-			match(TokenType.RightParen); 
-			e = new Unary(op, term); 
-		}else 
+		} else if (token.type() == TokenType.Int || token.type() == TokenType.Float || token.type() == TokenType.Str
+				|| token.type() == TokenType.Char) {
+			Operator op = new Operator(match(token.type()));
+			match(TokenType.LeftParen);
+			Expression term = expression();
+			match(TokenType.RightParen);
+			e = new Unary(op, term);
+		} else
 			error("Identifier | Literal | ( | Type");
 		return e;
 	}
-	
+
 //	private Expression inputExpression() {
 //		// InputStatement --> input '(' Expression ')'
 //		match(TokenType.Input);
@@ -334,7 +340,7 @@ public class Parser {
 	}
 
 	private boolean isEqualityOp() {
-		return token.type() == TokenType.Equals  || token.type() == TokenType.NotEqual;
+		return token.type() == TokenType.Equals || token.type() == TokenType.NotEqual;
 	}
 
 	private boolean isRelationalOp() {
@@ -343,9 +349,8 @@ public class Parser {
 	}
 
 	private boolean isLiteral() {
-		return token.type() == TokenType.IntLiteral || isBooleanLiteral()
-				|| token.type() == TokenType.FloatLiteral || token.type() == TokenType.CharLiteral
-				|| token.type() == TokenType.StrLiteral;
+		return token.type() == TokenType.IntLiteral || isBooleanLiteral() || token.type() == TokenType.FloatLiteral
+				|| token.type() == TokenType.CharLiteral || token.type() == TokenType.StrLiteral;
 	}
 
 	private boolean isBooleanLiteral() {

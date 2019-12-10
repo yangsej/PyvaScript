@@ -18,7 +18,7 @@ public class Lexer {
 	private final char eolnCh = '\n';
 	private final char eofCh = '\004';
 	private String strtemp = "";
-	
+
 	private int space = 0;
 
 	public Lexer(String fileName) { // source filename
@@ -57,6 +57,7 @@ public class Lexer {
 	public int getLineNum() { // line 계산
 		return lineno;
 	}
+
 	public int getSpaceNum() { // line 계산
 		return space;
 	}
@@ -65,12 +66,14 @@ public class Lexer {
 		do {
 			space = 0;
 			strtemp = "";
-			while(ch == ' ' || ch == '\t') {
-				if(ch == ' ') space++;
-				else space+=4;
+			while (ch == ' ' || ch == '\t') {
+				if (ch == ' ')
+					space++;
+				else
+					space += 4;
 				ch = nextChar();
 			}
-			
+
 			if (isLetter(ch)) { // ident or keyword
 				String spelling = concat(letters + digits);
 				return Token.keyword(spelling);
@@ -86,7 +89,7 @@ public class Lexer {
 					ch = nextChar();
 					return Token.enterTok;
 //					break;
-					
+
 				case ':':
 					ch = nextChar();
 					return Token.colonTok;
@@ -137,13 +140,17 @@ public class Lexer {
 				case ')':
 					ch = nextChar();
 					return Token.rightParenTok;
-					
-				case '[': ch = nextChar(); return Token.leftBracketTok; 
-				case ']': ch = nextChar(); return Token.rightBracketTok;
-				 
+
+				case '[':
+					ch = nextChar();
+					return Token.leftBracketTok;
+				case ']':
+					ch = nextChar();
+					return Token.rightBracketTok;
+
 				/*
-				 * case '{': ch = nextChar(); return Token.leftBraceTok; case
-				 * '}': ch = nextChar(); return Token.rightBraceTok;
+				 * case '{': ch = nextChar(); return Token.leftBraceTok; case '}': ch =
+				 * nextChar(); return Token.rightBraceTok;
 				 */
 				case ';':
 					ch = nextChar();

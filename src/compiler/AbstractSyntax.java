@@ -2,7 +2,6 @@ package compiler;
 
 import java.util.*;
 
-
 class Program {
 	// Program = Block body
 	Block body;
@@ -73,7 +72,6 @@ abstract class Statement {
 	// Statement = Skip | Assignment | Conditional | Loop | Print
 }
 
-
 //class Statement_Skip extends Statement {
 //	public String toString() {
 //		return Program.tab() + "Statement_Skip";
@@ -86,12 +84,11 @@ class Skip extends Statement {
 	}
 }
 
-class Block extends Statement{
+class Block extends Statement {
 	// Block = Statement*
 	// (a Vector of members)
 	public ArrayList<Statement> members = new ArrayList<Statement>();
-	
-	
+
 	public String toString() {
 		String str = Program.tab() + ":";
 		Program.tabs++;
@@ -103,12 +100,10 @@ class Block extends Statement{
 	}
 }
 
-
-
 class Assignment extends Statement {
 	// Assignment = Variable target; Expression source
 //	List DeclCheck = new ArrayList<String>();
-	
+
 	Variable target;
 	Expression source;
 
@@ -241,11 +236,11 @@ class Variable extends Expression {
 class ListItem extends Variable {
 	// ListItem = String id | ArrayList<Expression> index
 	public ArrayList<Expression> index = new ArrayList<Expression>();
-	
+
 	ListItem(String s) {
 		super(s);
 	}
-	
+
 	ListItem(String s, ArrayList<Expression> i) {
 		super(s);
 		index = i;
@@ -253,7 +248,7 @@ class ListItem extends Variable {
 
 	public String toString() {
 		String str = id;
-		for(Expression e : index) {
+		for (Expression e : index) {
 			str += "[" + e + "]";
 		}
 		return str;
@@ -313,7 +308,7 @@ abstract class Value extends Expression {
 		assert false : "should never reach here";
 		return " ";
 	}
-	
+
 	ArrayList<Expression> list() {
 		assert false : "should never reach here";
 		return new ArrayList<Expression>();
@@ -344,24 +339,24 @@ abstract class Value extends Expression {
 	}
 }
 
-class List extends Value{
+class List extends Value {
 	public ArrayList<Expression> members = new ArrayList<Expression>();
-	
-	List(){
+
+	List() {
 		type = Type.LIST;
 	}
-	
-	List(ArrayList<Expression> a){
+
+	List(ArrayList<Expression> a) {
 		this();
 		members = a;
 	}
-	
+
 	ArrayList<Expression> list() {
 		assert !undef : "reference to undefined list";
 		return members;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return members.toString();
 	}
 }
@@ -673,7 +668,7 @@ class Operator {
 
 	final static String boolMap[][] = { { EQ, BOOL_EQ }, { NE, BOOL_NE }, { LT, BOOL_LT }, { LE, BOOL_LE },
 			{ GT, BOOL_GT }, { GE, BOOL_GE }, };
-	
+
 //	final static String strMap[][] = { { EQ, CHAR_EQ }, { NE, CHAR_NE }, { LT, CHAR_LT }, { LE, CHAR_LE },
 //			{ GT, CHAR_GT }, { GE, CHAR_GE }, { INT, C2I } };
 
