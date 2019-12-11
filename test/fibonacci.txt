@@ -1,0 +1,15 @@
+input(n, "please input number")
+n=int(n)
+i=0
+
+while i<= n :
+	if i == 0 : 
+		fibo0=0
+		fibo1=0
+		fibo2=1
+	else :
+		fibo1=fibo0+fibo2
+		fibo0=fibo2
+		fibo2=fibo1
+	i=i+1
+print(fibo0)
