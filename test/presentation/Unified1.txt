@@ -13,7 +13,7 @@ while d == true :
       f[3]="pyvascript"
       if a >= 24 :
          a = (a / 2) * 3
-         f[3]=-1
+         f[0]=-1
    else :
       b=-1
       d = false
